@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
       .finally(() => {
         navigator.serviceWorker
           .register('/service-worker.min.js')
+          .then(() => {
+            window.cleanApiCache = () =>
+              navigator.serviceWorker.controller?.postMessage({ type: 'clean' });
+          })
           .catch((err) => console.error('SW registration failed', err));
       });
   }
