@@ -3,7 +3,6 @@ header('Content-Type: application/json');
 $ttl = 300;
 header("Cache-Control: public, max-age={$ttl}, stale-while-revalidate={$ttl}");
 require_once __DIR__ . '/../cacheUtils.php';
-require_once __DIR__ . '/../recipe_tree.php';
 require_once __DIR__ . '/../config/endpoints.php';
 
 $ids = isset($_GET['ids']) ? $_GET['ids'] : [];
@@ -140,6 +139,31 @@ function recipe_min_from_data($recipe) {
     ];
 }
 
+function fetch_nested_recipe($id) {
+    $cacheKey = "nested_recipe_{$id}";
+    $cache = CacheUtils::get($cacheKey);
+    if ($cache && isset($cache['data'])) {
+        $json = json_decode($cache['data'], true);
+        if ($json !== null) {
+            return $json;
+        }
+    }
+    $ch = curl_init(RECIPE_TREE_ENDPOINT . "/{$id}");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    $body = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($code === 200 && $body !== false) {
+        CacheUtils::set($cacheKey, $body, 86400);
+        $json = json_decode($body, true);
+        if ($json !== null) {
+            return $json;
+        }
+    }
+    return null;
+}
+
 $idStr = implode(',', $ids);
 
 $requests = [
@@ -227,7 +251,7 @@ foreach ($ids as $id) {
         'item' => $itemMap[$id],
         'recipe' => $recipeMap[$id] ?? null,
         'market' => $marketMap[$id] ?? [],
-        'nested_recipe' => get_nested_recipe($id)
+        'nested_recipe' => fetch_nested_recipe($id)
     ];
 }
 

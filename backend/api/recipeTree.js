@@ -7,30 +7,33 @@ const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 const mongo = new MongoClient(MONGO_URL);
 const redis = createClient({ url: REDIS_URL });
 
-async function init() {
-  if (!mongo.topology || !mongo.topology.isConnected()) {
-    await mongo.connect();
+async function init(mongoClient = mongo, redisClient = redis) {
+  if (!mongoClient.topology || !mongoClient.topology.isConnected()) {
+    await mongoClient.connect();
   }
-  if (!redis.isOpen) {
-    await redis.connect();
+  if (!redisClient.isOpen) {
+    await redisClient.connect();
   }
 }
 
-async function getRecipeTree(id) {
-  await init();
-  const cache = await redis.hGet('recipeTrees', String(id));
+async function getRecipeTree(id, { mongoClient = mongo, redisClient = redis } = {}) {
+  await init(mongoClient, redisClient);
+  const cache = await redisClient.hGet('recipeTrees', String(id));
   if (cache) return JSON.parse(cache);
-  const doc = await mongo.db().collection('recipeTrees').findOne({ id: Number(id) }, { projection: { _id: 0 } });
+  const doc = await mongoClient
+    .db()
+    .collection('recipeTrees')
+    .findOne({ id: Number(id) }, { projection: { _id: 0 } });
   if (doc) {
-    await redis.hSet('recipeTrees', String(id), JSON.stringify(doc));
+    await redisClient.hSet('recipeTrees', String(id), JSON.stringify(doc));
   }
   return doc;
 }
 
-async function handler(req, res) {
+async function handler(req, res, clients) {
   const id = Number((req.params && req.params.id) || req.url.split('/').pop());
   try {
-    const tree = await getRecipeTree(id);
+    const tree = await getRecipeTree(id, clients);
     if (!tree) {
       res.statusCode = 404;
       res.setHeader('Content-Type', 'application/json');
@@ -46,8 +49,8 @@ async function handler(req, res) {
   }
 }
 
-module.exports = handler;
-module.exports.getRecipeTree = getRecipeTree;
+module.exports = (req, res, clients) => handler(req, res, clients);
+module.exports.getRecipeTree = (id, clients) => getRecipeTree(id, clients);
 
 if (require.main === module) {
   const http = require('http');

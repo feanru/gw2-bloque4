@@ -3,7 +3,6 @@ header('Content-Type: application/json');
 $ttl = 300;
 header("Cache-Control: public, max-age={$ttl}, stale-while-revalidate={$ttl}");
 require_once __DIR__ . '/../cacheUtils.php';
-require_once __DIR__ . '/../recipe_tree.php';
 require_once __DIR__ . '/../config/endpoints.php';
 require_once __DIR__ . '/../httpUtils.php';
 
@@ -127,7 +126,8 @@ if ($responses['market']['status'] === 200 && $responses['market']['data']) {
     $market = parse_market_csv($responses['market']['data']);
 }
 
-$nested = get_nested_recipe($itemId);
+$nestedStatus = null;
+$nested = fetch_json(RECIPE_TREE_ENDPOINT . "/{$itemId}", $nestedStatus, "nested_recipe_{$itemId}", 86400);
 
 $output = json_encode([
     'item' => $item,

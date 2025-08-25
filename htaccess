@@ -7,6 +7,9 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # Proxy recipe tree API to Node backend
+  RewriteRule ^recipe-tree/(.*)$ http://127.0.0.1:3000/recipe-tree/$1 [P,L]
+
   # 0) Forzar HTTPS (301)
   RewriteCond %{HTTPS} !=on
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
