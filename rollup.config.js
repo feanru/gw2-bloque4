@@ -29,8 +29,8 @@ export default {
     format: 'es',
     entryFileNames: (chunkInfo) =>
       chunkInfo.facadeModuleId.includes('/workers/')
-        ? '[name].js'
-        : '[name].min.js',
+        ? '[name].[hash].js'
+        : '[name].[hash].min.js',
     chunkFileNames: '[name]-[hash].js',
     manualChunks(id) {
       if (id.includes('src/js/utils')) {
