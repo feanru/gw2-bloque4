@@ -16,7 +16,7 @@ async function ensureDeps() {
     depsPromise = Promise.all([
       import('./items-core.js'),
       import('./utils/priceHelper.js'),
-      import('./services/recipeService.js'),
+      import('./services/recipeService.min.js'),
       import('./utils/stateManager.js')
     ]).then(([core, price, recipe, state]) => {
       ({
