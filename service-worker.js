@@ -1,5 +1,6 @@
-const STATIC_CACHE = 'static-v4';
-const API_CACHE = 'api-v2';
+const APP_VERSION = 'vX';
+const STATIC_CACHE = `static-${APP_VERSION}`;
+const API_CACHE = `api-${APP_VERSION}`;
 // Background videos served with fixed names
 const VIDEO_ASSETS = [
   'img/Secuencia01.mp4',
