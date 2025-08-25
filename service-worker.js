@@ -75,23 +75,10 @@ self.addEventListener('message', (event) => {
   }
 });
 
-function shouldReturnNotModified(req, res) {
-  const inm = req.headers.get('If-None-Match');
-  const ims = req.headers.get('If-Modified-Since');
-  const etag = res.headers.get('ETag');
-  const lm = res.headers.get('Last-Modified');
-  if (inm && etag && inm === etag) return true;
-  if (ims && lm && ims === lm) return true;
-  return false;
-}
-
 async function cacheFirst(req, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(req);
   if (cached) {
-    if (shouldReturnNotModified(req, cached)) {
-      return new Response(null, { status: 304, statusText: 'Not Modified', headers: cached.headers });
-    }
     return cached;
   }
   const res = await fetch(req);
@@ -142,9 +129,6 @@ async function staleWhileRevalidate(req, cacheName) {
   if (cached) {
     const exp = parseInt(cached.headers.get('X-Cache-Expires') || '0', 10);
     if (exp && now < exp) {
-      if (shouldReturnNotModified(req, cached)) {
-        return { response: new Response(null, { status: 304, statusText: 'Not Modified', headers: cached.headers }), fetchPromise: null };
-      }
       return { response: cached, fetchPromise: null };
     }
     return { response: cached, fetchPromise: fetchAndUpdate() };
