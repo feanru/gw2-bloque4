@@ -1,6 +1,7 @@
 const APP_VERSION = 'vX';
 const STATIC_CACHE = `static-${APP_VERSION}`;
 const API_CACHE = `api-${APP_VERSION}`;
+const DEFAULT_TTL = 5 * 60 * 1000; // 5 minutes
 // Background videos served with fixed names
 const VIDEO_ASSETS = [
   'img/Secuencia01.mp4',
@@ -102,7 +103,7 @@ function getTTLFromResponse(res) {
   if (maxAgeMatch) return parseInt(maxAgeMatch[1], 10) * 1000;
   const custom = res.headers.get('X-Cache-Ttl');
   if (custom) return parseInt(custom, 10) * 1000;
-  return 0;
+  return DEFAULT_TTL;
 }
 
 async function staleWhileRevalidate(req, cacheName) {
@@ -152,6 +153,14 @@ async function cleanExpired() {
       const exp = parseInt(res.headers.get('X-Cache-Expires') || '0', 10);
       if (exp && now > exp) {
         await cache.delete(req);
+        return;
+      }
+      if (!exp) {
+        const dateHeader = res.headers.get('Date');
+        const created = dateHeader ? new Date(dateHeader).getTime() : 0;
+        if (created && now - created > DEFAULT_TTL) {
+          await cache.delete(req);
+        }
       }
     })
   );
