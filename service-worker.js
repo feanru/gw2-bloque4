@@ -7,7 +7,6 @@ const VIDEO_ASSETS = [
   'img/Secuencia02.mp4',
   'img/Secuencia03.mp4',
 ];
-const CLEAN_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -54,7 +53,12 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       (async () => {
         const { response, fetchPromise } = await staleWhileRevalidate(request, API_CACHE);
-        if (fetchPromise) event.waitUntil(fetchPromise);
+        event.waitUntil(
+          (async () => {
+            if (fetchPromise) await fetchPromise;
+            await cleanExpired();
+          })()
+        );
         return response;
       })()
     );
@@ -170,5 +174,3 @@ async function invalidateItem(id) {
     })
   );
 }
-
-setInterval(cleanExpired, CLEAN_INTERVAL);
