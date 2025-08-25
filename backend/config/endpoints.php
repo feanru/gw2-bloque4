@@ -5,11 +5,13 @@ $apiBase = getenv('API_BASE_URL') ?: 'https://api.guildwars2.com/v2';
 $marketCsv = getenv('MARKET_CSV_URL') ?: 'https://api.datawars2.ie/gw2/v1/items/csv';
 $lang = getenv('LANG') ?: 'es';
 $apiKey = getenv('GW2_API_KEY') ?: '';
+$recipeTree = getenv('RECIPE_TREE_URL') ?: 'http://localhost:3000/recipe-tree';
 
 define('API_BASE_URL', $apiBase);
 define('MARKET_CSV_URL', $marketCsv);
 define('LANG', $lang);
 define('GW2_API_KEY', $apiKey);
+define('RECIPE_TREE_ENDPOINT', $recipeTree);
 
 define('ITEMS_ENDPOINT', API_BASE_URL . '/items');
 define('RECIPES_ENDPOINT', API_BASE_URL . '/recipes');

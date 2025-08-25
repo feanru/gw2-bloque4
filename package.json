@@ -5,7 +5,7 @@
     "build": "npm run build:packages && rm -rf dist/js && APP_VERSION=v$(git rev-parse --short HEAD) && sed \"s/__APP_VERSION__/$APP_VERSION/\" service-worker.js > service-worker.build.js && npx terser service-worker.build.js -o service-worker.min.js && rm service-worker.build.js && rollup -c",
     "migrate:mongo": "node backend/setup.mongo.js",
     "jobs": "node backend/jobs/index.js",
-    "test": "npm --prefix packages/recipe-nesting run build && node tests/dones-worker.test.mjs && node tests/price-helper-map.test.mjs && node tests/recipe-nesting-map.test.mjs && node tests/recipe-nesting-cycle.test.mjs && node tests/recipe-nesting-guildupgrade.test.mjs",
+    "test": "npm --prefix packages/recipe-nesting run build && node tests/dones-worker.test.mjs && node tests/price-helper-map.test.mjs && node tests/recipe-nesting-map.test.mjs && node tests/recipe-nesting-cycle.test.mjs && node tests/recipe-nesting-guildupgrade.test.mjs && node tests/recipe-tree-cache.test.mjs",
     "build:packages": "npm --prefix packages/recipe-nesting run build && npm --prefix packages/recipe-calculation run build"
   },
   "dependencies": {
