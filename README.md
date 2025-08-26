@@ -10,6 +10,17 @@ Include the bundles from `/dist/js/` in your HTML pages:
 <script src="/dist/js/bundle-legendary.min.js"></script>
 ```
 
+## Verificación de assets
+
+Ejecuta las pruebas para comprobar que los HTML en `dist/` no contienen referencias rotas:
+
+```bash
+npm test
+```
+
+Este comando incluye `tests/check-assets.mjs`, que recorre cada archivo HTML y valida que los `<script src>` y las llamadas `import()` apunten a archivos existentes.  
+Si se listan rutas faltantes, vuelve a generar el build con `npm run build` o corrige los paths antes de desplegar.
+
 ## Despliegue
 
 Los archivos HTML referencian recursos con hash y se sirven con `Cache-Control: no-cache` para que los navegadores obtengan siempre la versión más reciente. Tras cada despliegue, invalida las cachés de la CDN o de Cloudflare para forzar la actualización de estos archivos.
