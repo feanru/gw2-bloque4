@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
   if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data?.type === 'reload') {
+        alert('La página se actualizará para aplicar la nueva versión.');
+      }
+    });
     navigator.serviceWorker
       .getRegistrations()
       .then((regs) => Promise.all(regs.map((r) => r.unregister())))
