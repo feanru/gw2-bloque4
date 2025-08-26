@@ -3,6 +3,13 @@
   AddType application/javascript .js .mjs
 </IfModule>
 
+# ───────── Cache-Control for HTML ─────────
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
 # ───────── Reglas de reescritura ─────────
 <IfModule mod_rewrite.c>
   RewriteEngine On

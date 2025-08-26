@@ -10,6 +10,10 @@ Include the bundles from `/dist/js/` in your HTML pages:
 <script src="/dist/js/bundle-legendary.min.js"></script>
 ```
 
+## Despliegue
+
+Los archivos HTML referencian recursos con hash y se sirven con `Cache-Control: no-cache` para que los navegadores obtengan siempre la versión más reciente. Tras cada despliegue, invalida las cachés de la CDN o de Cloudflare para forzar la actualización de estos archivos.
+
 After loading `/dist/js/bundle-legendary.min.js` a global object `window.LegendaryData` becomes available with the following properties:
 
 - `LEGENDARY_ITEMS` – mapping of first generation legendary items.
