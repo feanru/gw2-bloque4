@@ -6,7 +6,7 @@ require_once __DIR__ . '/../env.php';
  $lang = getenv('LANG') ?: 'es';
  $apiKey = getenv('GW2_API_KEY') ?: '';
  $recipeTree = getenv('RECIPE_TREE_URL') ?: 'http://localhost:3000/recipe-tree';
- $recipeTreeEndpoint = getenv('RECIPE_TREE_ENDPOINT') ?: 'http://localhost/backend/recipe_tree.php';
+ $recipeTreeEndpoint = getenv('RECIPE_TREE_ENDPOINT') ?: 'http://localhost/backend/api/recipeTree.js';
 
 define('API_BASE_URL', $apiBase);
 define('MARKET_CSV_URL', $marketCsv);
