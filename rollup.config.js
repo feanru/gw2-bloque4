@@ -1,4 +1,5 @@
 import terser from '@rollup/plugin-terser';
+import { writeFileSync } from 'node:fs';
 
 export default {
   // Entradas separadas para cada vista o funcionalidad pesada
@@ -22,7 +23,20 @@ export default {
     },
   external: ['./tabs.min.js', './services/recipeService.min.js'],
   plugins: [
-    terser()
+    terser(),
+    {
+      name: 'manifest',
+      generateBundle(options, bundle) {
+        const manifest = {};
+        for (const [fileName, chunk] of Object.entries(bundle)) {
+          if (chunk.type === 'chunk') {
+            const originalName = `/dist/js/${chunk.name}${chunk.facadeModuleId.includes('/workers/') ? '.js' : '.min.js'}`;
+            manifest[originalName] = `/dist/js/${fileName}`;
+          }
+        }
+        writeFileSync('dist/manifest.json', JSON.stringify(manifest, null, 2));
+      }
+    }
   ],
   output: {
     dir: 'dist/js',
