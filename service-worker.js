@@ -19,20 +19,25 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    Promise.all([
-      caches.keys().then((keys) =>
-        Promise.all(
-          keys
-            .filter(
-              (k) =>
-                (k.startsWith('static-') || k.startsWith('api-')) &&
-                ![STATIC_CACHE, API_CACHE].includes(k)
-            )
-            .map((k) => caches.delete(k))
-        )
-      ),
-      cleanExpired(),
-    ]).then(() => self.clients.claim())
+    (async () => {
+      await Promise.all([
+        caches.keys().then((keys) =>
+          Promise.all(
+            keys
+              .filter(
+                (k) =>
+                  (k.startsWith('static-') || k.startsWith('api-')) &&
+                  ![STATIC_CACHE, API_CACHE].includes(k)
+              )
+              .map((k) => caches.delete(k))
+          )
+        ),
+        cleanExpired(),
+      ]);
+      const clients = await self.clients.matchAll();
+      clients.forEach((client) => client.navigate(client.url));
+      await self.clients.claim();
+    })()
   );
 });
 
