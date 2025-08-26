@@ -35,12 +35,9 @@ self.addEventListener('activate', (event) => {
         cleanExpired(),
       ]);
       await self.clients.claim();
-      clients
-        .matchAll({ type: 'window' })
-        .then((cs) => {
-          cs.forEach((c) => c.postMessage({ type: 'reload' }));
-          cs.forEach((c) => c.navigate(c.url));
-        });
+      const clientList = await self.clients.matchAll({ type: 'window' });
+      clientList.forEach((c) => c.postMessage({ type: 'reload' }));
+      clientList.forEach((c) => c.navigate(c.url));
     })()
   );
 });
