@@ -36,7 +36,7 @@ export default {
       if (id.includes('src/js/utils')) {
         return 'utils';
       }
-      if (id.includes('src/js/services')) {
+      if (id.includes('src/js/services/') && id.endsWith('.js')) {
         return 'services';
       }
     }
