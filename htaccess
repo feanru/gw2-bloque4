@@ -27,6 +27,8 @@
   # 3) Devolver 404 para recursos inexistentes dentro de /dist/js
   RewriteCond %{REQUEST_URI} ^/dist/js/
   RewriteCond %{REQUEST_FILENAME} !-f
+  ErrorDocument 404 "/* empty */"
+  ForceType application/javascript
   RewriteRule ^ - [L,R=404]
 
   # 4) No reescribir peticiones de JS (aunque no existan),
