@@ -20,7 +20,7 @@ export default {
       'ingredientTreeWorker': 'src/js/workers/ingredientTreeWorker.js',
       'costsWorker': 'src/js/workers/costsWorker.js'
     },
-  external: ['./tabs.min.js'],
+  external: ['./tabs.min.js', './services/recipeService.min.js'],
   plugins: [
     terser()
   ],
@@ -36,7 +36,7 @@ export default {
       if (id.includes('src/js/utils')) {
         return 'utils';
       }
-      if (id.includes('src/js/services/') && id.endsWith('.js')) {
+      if (id.includes('src/js/services/recipeService.js')) {
         return 'services';
       }
     }
