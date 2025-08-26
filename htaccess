@@ -35,7 +35,9 @@
   RewriteCond %{REQUEST_URI} ^/dist/js/
   RewriteCond %{REQUEST_FILENAME} !-f
   ErrorDocument 404 "/* empty */"
-  ForceType application/javascript
+  <IfModule mod_headers.c>
+    Header set Content-Type application/javascript
+  </IfModule>
   RewriteRule ^ - [L,R=404]
 
   # 4) No reescribir peticiones de JS (aunque no existan),
