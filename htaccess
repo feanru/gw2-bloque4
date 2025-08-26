@@ -14,8 +14,8 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Proxy recipe tree API to Node backend
-  RewriteRule ^recipe-tree/(.*)$ http://127.0.0.1:3000/recipe-tree/$1 [P,L]
+  # Route recipe tree API through PHP proxy
+  RewriteRule ^recipe-tree/(.*)$ backend/recipe_tree.php/$1 [L]
 
   # 0) Forzar HTTPS (301)
   RewriteCond %{HTTPS} !=on
