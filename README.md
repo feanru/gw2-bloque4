@@ -10,16 +10,18 @@ Include the bundles from `/dist/js/` in your HTML pages:
 <script src="/dist/js/bundle-legendary.min.js"></script>
 ```
 
-## Verificación de assets
+## Pruebas
 
-Ejecuta las pruebas para comprobar que los HTML en `dist/` no contienen referencias rotas:
+Instala las dependencias del proyecto y ejecuta la suite con:
 
 ```bash
+npm install
 npm test
 ```
 
-Este comando incluye `tests/check-assets.mjs`, que recorre cada archivo HTML y valida que los `<script src>` y las llamadas `import()` apunten a archivos existentes.  
-Si se listan rutas faltantes, vuelve a generar el build con `npm run build` o corrige los paths antes de desplegar.
+El comando `npm test` compila los paquetes necesarios y después ejecuta los scripts ubicados en `tests/`. Entre ellos se encuentra `recipeTree.test.js`, que inyecta clientes simulados de MongoDB y Redis para verificar que la primera petición obtenga los datos desde Mongo y la segunda desde la caché de Redis. También se ejecuta `tests/check-assets.mjs`, que recorre cada HTML de `dist/` y valida que los `<script src>` y las llamadas `import()` apunten a archivos existentes.
+
+Las pruebas sólo requieren Node.js y las dependencias instaladas (`mongodb` y `redis`); no es necesario levantar instancias reales de estas bases de datos, ya que se usan mocks.
 
 ## Despliegue
 
