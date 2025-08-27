@@ -1,7 +1,8 @@
 // Placeholder replaced during build with the current version hash
 const APP_VERSION = '__APP_VERSION__';
-const STATIC_CACHE = `static-${APP_VERSION}`;
-const API_CACHE = `api-${APP_VERSION}`;
+const CACHE_VERSION = 2;
+const STATIC_CACHE = `static-${APP_VERSION}-v${CACHE_VERSION}`;
+const API_CACHE = `api-${APP_VERSION}-v${CACHE_VERSION}`;
 const DEFAULT_TTL = 5 * 60 * 1000; // 5 minutes
 // Background videos served with fixed names
 const VIDEO_ASSETS = [
@@ -20,14 +21,13 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
+      const expectedCaches = [STATIC_CACHE, API_CACHE];
       await Promise.all([
         caches.keys().then((keys) =>
           Promise.all(
             keys
               .filter(
-                (k) =>
-                  (k.startsWith('static-') || k.startsWith('api-')) &&
-                  ![STATIC_CACHE, API_CACHE].includes(k)
+                (k) => /^(static|api)-/.test(k) && !expectedCaches.includes(k)
               )
               .map((k) => caches.delete(k))
           )
