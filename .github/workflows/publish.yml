@@ -14,4 +14,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm run build && npm run check-assets
+      - run: rm -rf dist/js dist/manifest.json
+      - run: npm run build
+      - run: npm run check-assets
+      - run: npm run purge:cdn
