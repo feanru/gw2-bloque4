@@ -2,7 +2,13 @@
 
 This repository contains the scripts used by the site. Source files are kept in `src/js` and the distributable, minified versions live in `/dist/js/`.
 
-Run `npm run build` to regenerate the bundles. The command uses Rollup to transform each file under `src/js` into `/dist/js/<name>.min.js`.
+Run `npm run build` to regenerate the bundles. Before compiling it removes any previous output in `dist/js` and `dist/manifest.json` to avoid stale assets. The command uses Rollup to transform each file under `src/js` into `/dist/js/<name>.min.js` and, once finished, runs a CDN purge so clients receive the new routes.
+
+### Build y despliegue
+
+1. Ejecuta `npm run build` para generar los bundles. Este comando limpia `dist/js` y `dist/manifest.json` al inicio, calcula `APP_VERSION` y compila los archivos.
+2. Al finalizar, el script `postbuild` invoca `scripts/purge-cdn.js` para invalidar caches de Cloudflare. Define `CLOUDFLARE_ZONE_ID` y `CLOUDFLARE_TOKEN` en el entorno para que la operación tenga éxito.
+3. Publica el contenido de `dist/` en tu servidor o CDN. Los recursos incluyen hashes y deben servirse con `Cache-Control: no-cache`.
 
 Include the bundles from `/dist/js/` in your HTML pages:
 

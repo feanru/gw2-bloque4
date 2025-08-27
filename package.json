@@ -2,12 +2,12 @@
   "name": "gw2-project",
   "private": true,
   "scripts": {
-    "build": "npm run build:packages && rm -rf dist/js && APP_VERSION=v$(git rev-parse --short HEAD) && sed \"s/__APP_VERSION__/$APP_VERSION/\" service-worker.js > service-worker.build.js && npx terser service-worker.build.js -o service-worker.min.js && rm service-worker.build.js && rollup -c",
+    "build": "rm -rf dist/js dist/manifest.json && npm run build:packages && APP_VERSION=v$(git rev-parse --short HEAD) && sed \"s/__APP_VERSION__/$APP_VERSION/\" service-worker.js > service-worker.build.js && npx terser service-worker.build.js -o service-worker.min.js && rm service-worker.build.js && rollup -c",
     "migrate:mongo": "node backend/setup.mongo.js",
     "jobs": "node backend/jobs/index.js",
     "test": "npm --prefix packages/recipe-nesting run build && node tests/dones-worker.test.mjs && node tests/price-helper-map.test.mjs && node tests/recipe-nesting-map.test.mjs && node tests/recipe-nesting-cycle.test.mjs && node tests/recipe-nesting-guildupgrade.test.mjs && node tests/recipe-tree-cache.test.mjs && node tests/recipeTree.test.js && node tests/check-assets.mjs",
     "build:packages": "npm --prefix packages/recipe-nesting run build && npm --prefix packages/recipe-calculation run build",
-    "postbuild": "node scripts/update-html.js",
+    "postbuild": "node scripts/update-html.js && npm run purge:cdn",
     "check-assets": "node scripts/check-assets.js",
     "bump:cache": "bash scripts/bump-cache-version.sh",
     "purge:cdn": "node scripts/purge-cdn.js"
