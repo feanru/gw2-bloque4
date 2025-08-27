@@ -98,10 +98,11 @@ export function getCached(key, withMeta = false) {
 
 export function fetchDedup(url, options = {}) {
   const key = requestKey(url, options);
-  if (inFlight.has(key)) return inFlight.get(key);
-  const promise = fetchWithRetry(url, options).finally(() => inFlight.delete(key));
-  inFlight.set(key, promise);
-  return promise;
+  const base =
+    inFlight.get(key) ||
+    fetchWithRetry(url, options).finally(() => inFlight.delete(key));
+  inFlight.set(key, base);
+  return base.then((res) => res.clone());
 }
 
 export default {
