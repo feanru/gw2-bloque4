@@ -30,8 +30,9 @@ export default {
       generateBundle(options, bundle) {
         const manifest = {};
         for (const [fileName, chunk] of Object.entries(bundle)) {
-          if (chunk.type === 'chunk') {
-            const originalName = `/dist/js/${chunk.name}${chunk.facadeModuleId.includes('/workers/') ? '.js' : '.min.js'}`;
+          if (chunk.type === 'chunk' && chunk.isEntry) {
+            const isWorker = chunk.facadeModuleId?.includes('/workers/') ?? false;
+            const originalName = `/dist/js/${chunk.name}${isWorker ? '.js' : '.min.js'}`;
             manifest[originalName] = `/dist/js/${fileName}`;
           }
         }
