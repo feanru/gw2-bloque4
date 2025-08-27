@@ -22,6 +22,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
       const expectedCaches = [STATIC_CACHE, API_CACHE];
+      let hadOldCaches = false;
       await Promise.all([
         caches.keys().then((keys) =>
           Promise.all(
@@ -29,15 +30,19 @@ self.addEventListener('activate', (event) => {
               .filter(
                 (k) => /^(static|api)-/.test(k) && !expectedCaches.includes(k)
               )
-              .map((k) => caches.delete(k))
+              .map((k) => {
+                hadOldCaches = true;
+                return caches.delete(k);
+              })
           )
         ),
         cleanExpired(),
       ]);
       await self.clients.claim();
-      const clientList = await self.clients.matchAll({ type: 'window' });
-      clientList.forEach((c) => c.postMessage({ type: 'reload' }));
-      clientList.forEach((c) => c.navigate(c.url));
+      if (hadOldCaches) {
+        const clientList = await self.clients.matchAll({ type: 'window' });
+        clientList.forEach((c) => c.postMessage({ type: 'reload' }));
+      }
     })()
   );
 });
