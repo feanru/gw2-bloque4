@@ -11,6 +11,7 @@ export default {
     'bundle-legendary': 'src/js/bundle-legendary.js',
     'bundle-utils-1': 'src/js/bundle-utils-1.js',
     'item-loader': 'src/js/item-loader.js',
+    'items-core': 'src/js/items-core.js',
     'tabs': 'src/js/tabs.js',
     'feedback-modal': 'src/js/feedback-modal.js',
     'leg-craft-tabs': 'src/js/leg-craft-tabs.js',
