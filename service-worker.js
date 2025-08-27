@@ -107,9 +107,10 @@ async function cacheFirst(req, cacheName) {
     return cached;
   }
   const res = await fetch(req);
-  if (res.ok) {
+  if (res.ok && res.status === 200) {
     const type = res.headers.get('Content-Type') || '';
-    const isJs = req.destination === 'script' || new URL(req.url).pathname.endsWith('.js');
+    const isJs =
+      req.destination === 'script' || new URL(req.url).pathname.endsWith('.js');
     if (!isJs || type.includes('javascript')) {
       cache.put(req, res.clone());
     }
