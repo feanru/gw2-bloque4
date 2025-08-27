@@ -1,21 +1,16 @@
+# ───────── Clave secreta para refresh.php ─────────
+# Esta línea define la variable de entorno GW2_REFRESH_SECRET,
+# que usa refresh.php para validar el acceso.
+SetEnv GW2_REFRESH_SECRET "d8c8bb5530d0ae70999e2c9cc772fadb35316e45c0ce565d5e21c7eb265a07b3"
+
 # ───────── Tipos MIME ─────────
 <IfModule mod_mime.c>
   AddType application/javascript .js .mjs
 </IfModule>
 
-# ───────── Cache-Control for HTML ─────────
-<IfModule mod_headers.c>
-  <FilesMatch "\.html$">
-    Header set Cache-Control "no-cache"
-  </FilesMatch>
-</IfModule>
-
 # ───────── Reglas de reescritura ─────────
 <IfModule mod_rewrite.c>
   RewriteEngine On
-
-  # Route recipe tree API through Node proxy
-  RewriteRule ^recipe-tree/(.*)$ backend/api/recipeTree.js?params=$1 [P,L]
 
   # 0) Forzar HTTPS (301)
   RewriteCond %{HTTPS} !=on
@@ -34,10 +29,6 @@
   # 3) Devolver 404 para recursos inexistentes dentro de /dist/js
   RewriteCond %{REQUEST_URI} ^/dist/js/
   RewriteCond %{REQUEST_FILENAME} !-f
-  ErrorDocument 404 " "
-  <FilesMatch "\\.(js|mjs)$">
-    ForceType application/javascript
-  </FilesMatch>
   RewriteRule ^ - [L,R=404]
 
   # 4) No reescribir peticiones de JS (aunque no existan),
@@ -57,4 +48,3 @@
   AddHandler application/x-httpd-ea-php83___lsphp .php .php8 .phtml
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
-
