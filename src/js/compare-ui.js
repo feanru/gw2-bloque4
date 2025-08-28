@@ -8,6 +8,7 @@ import {
   findIngredientByIdAndParent,
   findIngredientByPath,
   calcPercent,
+  recalcAll,
   getTotals
 } from './items-core.js';
 import {
@@ -19,8 +20,6 @@ import {
   getQtyInputValue
 } from './ui-helpers.js';
 
-let costsWorker = null;
-
 function runIdleTasks(tasks) {
   function runner(deadline) {
     while (deadline.timeRemaining() > 0 && tasks.length) {
@@ -30,17 +29,6 @@ function runIdleTasks(tasks) {
     if (tasks.length) requestIdleCallback(runner);
   }
   requestIdleCallback(runner);
-}
-
-function calculateCosts(ingredientTree, globalQty) {
-  return new Promise((resolve, reject) => {
-    if (!costsWorker) {
-      costsWorker = new Worker('/dist/js/workers/costsWorker.js', { type: 'module' });
-    }
-    costsWorker.onmessage = (e) => resolve(e.data);
-    costsWorker.onerror = (err) => reject(err);
-    costsWorker.postMessage({ ingredientTree, globalQty });
-  });
 }
 
 // Functions imported from items-core.js provide shared logic
@@ -641,8 +629,8 @@ export { renderItemUI, safeRenderTable };
 async function safeRenderTable(buyPrice = window._mainBuyPrice, sellPrice = window._mainSellPrice) {
   if (buyPrice == null) buyPrice = window._mainBuyPrice;
   if (sellPrice == null) sellPrice = window._mainSellPrice;
-  const { updatedTree, totals } = await calculateCosts(window.ingredientObjs, window.globalQty);
-  window.ingredientObjs = updatedTree;
+  await recalcAll(window.ingredientObjs, window.globalQty);
+  const totals = getTotals();
   const seccion = document.getElementById('seccion-crafting');
   if (seccion) {
     const html = renderCraftingSectionUI(totals, buyPrice, sellPrice);
