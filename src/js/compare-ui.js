@@ -162,6 +162,7 @@ if (!window._expandBtnHandlerInstalled) {
 // Renderiza la fila del item principal (crafteable)
 function renderMainItemRow(mainItem, qty, totalBuy, totalSell, totalCrafted) {
   // Usa SIEMPRE los totales calculados en el nodo raíz tras recalc.
+  // getTotals() entrega los totales globales calculados por recalcAll.
   // Esto mantiene la misma lógica que en item.js y evita desincronizaciones.
   const realTotals = {
     totalBuy: mainItem.total_buy,
@@ -169,7 +170,7 @@ function renderMainItemRow(mainItem, qty, totalBuy, totalSell, totalCrafted) {
     totalCrafted:
       (mainItem.total_crafted !== undefined && mainItem.total_crafted !== null)
         ? mainItem.total_crafted
-        : getTotals(mainItem.children || []).totalCrafted
+        : getTotals().totalCrafted
   };
 
   if (!mainItem) return '';
@@ -636,6 +637,7 @@ async function safeRenderTable(buyPrice = window._mainBuyPrice, sellPrice = wind
   if (buyPrice == null) buyPrice = window._mainBuyPrice;
   if (sellPrice == null) sellPrice = window._mainSellPrice;
   await recalcAll(window.ingredientObjs, window.globalQty);
+  // getTotals() devuelve los totales globales calculados por recalcAll.
   const totals = getTotals();
   const seccion = document.getElementById('seccion-crafting');
   if (seccion) {
