@@ -247,7 +247,7 @@ function renderRows(ings, nivel = 0, parentUid = null, rowGroupIndex = 0, parent
       <tr data-path="${currentPath}" class="${isChild ? `subrow subrow-${nivel} child-of-${parentUid}` : ''} ${rowBgClass}" ${extraStyle}>
         <td class="th-border-left-items" ${indent}><img src="${ing.icon}" width="32"></td>
         <td><a href="/item?id=${ing.id}" class="item-link ${rarityClass}" target="_blank">${ing.name}</a></td>
-        <td>${ing.countTotal ? (Number.isInteger(ing.countTotal) ? ing.countTotal : ing.countTotal.toFixed(2)) : ing.count}</td>
+        <td>${(ing.countTotal != null) ? (Number.isInteger(ing.countTotal) ? ing.countTotal : ing.countTotal.toFixed(2)) : ing.count}</td>
         <td class="item-unit-sell">${formatGoldColored(ing.sell_price)} <span style="color: #c99b5b">c/u</span></td>
         
         <td class="item-solo-buy">
