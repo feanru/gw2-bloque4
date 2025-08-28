@@ -132,14 +132,20 @@ if (!window._modeChangeHandlerInstalled) {
 
       // Usa una función de búsqueda que opere dentro del árbol del nodo raíz
       const ingredient = findIngredientByPath([rootNode], pathArr);
-      
+
       if (ingredient) {
         let newMode = 'buy';
         if (target.classList.contains('chk-mode-sell')) newMode = 'sell';
         if (target.classList.contains('chk-mode-crafted')) newMode = 'crafted';
-        
-        // Llamamos al nuevo método que se encarga de todo: recalcular y volver a renderizar
-        ingredient.setMode(newMode);
+        // Llamamos al nuevo método si está disponible, sino ajustamos manualmente
+        if (typeof ingredient.setMode === 'function') {
+          // Llamamos al nuevo método que se encarga de todo: recalcular y volver a renderizar
+          ingredient.setMode(newMode);
+        } else {
+          ingredient.modeForParentCrafted = newMode;
+          ingredient.findRoot()?.recalc(window.globalQty || 1, null);
+          if (typeof safeRenderTable === 'function') safeRenderTable();
+        }
       }
     }
   });
