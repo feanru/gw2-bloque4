@@ -178,6 +178,8 @@ export function recalcAll(ingredientObjs, globalQty) {
   });
 }
 
+// Devuelve los últimos totales globales calculados por recalcAll.
+// Siempre ejecutar recalcAll antes de llamar para obtener datos actualizados.
 export function getTotals() {
   return lastTotals;
 }
@@ -588,6 +590,7 @@ if (typeof window !== 'undefined') {
   window.snapshotExpandState = snapshotExpandState;
   window.restoreExpandState = restoreExpandState;
   window.recalcAll = recalcAll;
+  // getTotals() siempre retorna los totales globales calculados por recalcAll
   window.getTotals = getTotals;
   window.findIngredientByIdAndParent = findIngredientByIdAndParent;
   window.findIngredientByPath = findIngredientByPath;
