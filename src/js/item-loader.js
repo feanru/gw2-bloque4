@@ -6,6 +6,7 @@ let prepareIngredientTreeData,
   setIngredientObjs,
   findIngredientById,
   cancelItemRequests,
+  recalcAll,
   getItemBundles,
   updateState,
   preloadPrices;
@@ -26,7 +27,8 @@ async function ensureDeps() {
         CraftIngredient,
         setIngredientObjs,
         findIngredientById,
-        cancelItemRequests
+        cancelItemRequests,
+        recalcAll
       } = core);
       ({ preloadPrices } = price);
       ({ getItemBundles } = recipe);
@@ -149,7 +151,8 @@ export async function loadItem(itemId) {
 
         if (stopPriceUpdater) stopPriceUpdater();
         const idsArray = Array.from(allIds);
-        const applyPrices = (priceMap) => {
+        const applyPrices = async (priceMap) => {
+          const updatedNodes = [];
           priceMap.forEach((data, id) => {
             const ing = findIngredientById(window.ingredientObjs, Number(id));
             if (!ing) return;
@@ -159,9 +162,16 @@ export async function loadItem(itemId) {
               window._mainBuyPrice = ing.buy_price;
               window._mainSellPrice = ing.sell_price;
             }
-            ing.recalc(window.globalQty || 1, null);
-            updateState(id, ing);
+            updatedNodes.push({ id, ing });
           });
+
+          if (typeof recalcAll === 'function') {
+            await recalcAll(window.ingredientObjs, window.globalQty);
+          } else if (window.ingredientObjs?.[0]) {
+            window.ingredientObjs[0].recalc(window.globalQty, null);
+          }
+
+          updatedNodes.forEach(({ id, ing }) => updateState(id, ing));
         };
         stopPriceUpdater = startPriceUpdater(idsArray, applyPrices);
       }, 0);
