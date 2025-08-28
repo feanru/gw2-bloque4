@@ -65,7 +65,7 @@ window.transformRecipeToIngredient = async function(recipe, count = 1, parentMul
                     icon: itemDetails.icon || '',
                     rarity: itemDetails.rarity,
                     count: ing.count,
-                    parentMultiplier: 1,
+                    parentMultiplier: recipe.output_item_count,
                     buy_price: prices.buy_price || 0,
                     sell_price: prices.sell_price || 0,
                     is_craftable: !!b.recipe,
