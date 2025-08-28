@@ -166,12 +166,7 @@ export async function loadItem(itemId) {
               updatedNodes.push({ id, ing });
             });
           });
-
-          if (typeof recalcAll === 'function') {
-            await recalcAll(window.ingredientObjs, window.globalQty);
-          } else if (window.ingredientObjs?.[0]) {
-            window.ingredientObjs[0].recalc(window.globalQty, null);
-          }
+          await window.safeRenderTable?.();
 
           updatedNodes.forEach(({ id, ing }) => updateState(id, ing));
         };
