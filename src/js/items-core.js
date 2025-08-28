@@ -67,7 +67,8 @@ export class CraftIngredient {
     if (isRoot) {
       this.countTotal = this.count * globalQty;
     } else {
-      this.countTotal = parent.countTotal * this.count;
+      const parentOutput = parent.recipe?.output_item_count || parent.parentMultiplier || 1;
+      this.countTotal = (parent.countTotal * this.count) / parentOutput;
     }
 
     if (this.children && this.children.length > 0) {
