@@ -4,7 +4,7 @@ import { startPriceUpdater } from './utils/priceUpdater.js';
 let prepareIngredientTreeData,
   CraftIngredient,
   setIngredientObjs,
-  findIngredientById,
+  findIngredientsById,
   cancelItemRequests,
   recalcAll,
   getItemBundles,
@@ -26,7 +26,7 @@ async function ensureDeps() {
         prepareIngredientTreeData,
         CraftIngredient,
         setIngredientObjs,
-        findIngredientById,
+        findIngredientsById,
         cancelItemRequests,
         recalcAll
       } = core);
@@ -154,15 +154,17 @@ export async function loadItem(itemId) {
         const applyPrices = async (priceMap) => {
           const updatedNodes = [];
           priceMap.forEach((data, id) => {
-            const ing = findIngredientById(window.ingredientObjs, Number(id));
-            if (!ing) return;
-            ing.buy_price = data.buy_price || 0;
-            ing.sell_price = data.sell_price || 0;
-            if (ing === window.ingredientObjs[0]) {
-              window._mainBuyPrice = ing.buy_price;
-              window._mainSellPrice = ing.sell_price;
-            }
-            updatedNodes.push({ id, ing });
+            const ings = findIngredientsById(window.ingredientObjs, Number(id));
+            if (!ings.length) return;
+            ings.forEach(ing => {
+              ing.buy_price = data.buy_price || 0;
+              ing.sell_price = data.sell_price || 0;
+              if (ing === window.ingredientObjs[0]) {
+                window._mainBuyPrice = ing.buy_price;
+                window._mainSellPrice = ing.sell_price;
+              }
+              updatedNodes.push({ id, ing });
+            });
           });
 
           if (typeof recalcAll === 'function') {

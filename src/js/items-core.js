@@ -229,6 +229,17 @@ export function findIngredientById(ings, id) {
   return null;
 }
 
+export function findIngredientsById(ings, id, acc = []) {
+  if (!Array.isArray(ings)) return acc;
+  for (const ing of ings) {
+    if (String(ing.id) === String(id)) acc.push(ing);
+    if (ing.children && ing.children.length) {
+      findIngredientsById(ing.children, id, acc);
+    }
+  }
+  return acc;
+}
+
 // -------------------------
 // API helpers
 // -------------------------
@@ -582,6 +593,7 @@ if (typeof window !== 'undefined') {
   window.findIngredientByPath = findIngredientByPath;
   window.findIngredientByUid = findIngredientByUid;
   window.findIngredientById = findIngredientById;
+  window.findIngredientsById = findIngredientsById;
   window.calcPercent = calcPercent;
 }
 
