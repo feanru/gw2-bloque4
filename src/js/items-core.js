@@ -327,10 +327,11 @@ export async function prepareIngredientTreeData(mainItemId, mainRecipeData) {
   if (mainRecipeData.nested_recipe) {
     window._mainRecipeOutputCount = mainRecipeData.output_item_count || 1;
     const deserialized = (mainRecipeData.nested_recipe || []).map(obj =>
-      createCraftIngredientFromRecipe(obj, obj.parentMultiplier, mainItemId)
+      createCraftIngredientFromRecipe(obj, obj.parentMultiplier, null)
     );
     function linkParents(node, parent) {
       node._parent = parent;
+      node._parentId = parent ? parent._uid : null;
       if (node.children) node.children.forEach(child => linkParents(child, node));
     }
     deserialized.forEach(root => { linkParents(root, null); root.recalc(window.globalQty, null); });
@@ -349,9 +350,10 @@ export async function prepareIngredientTreeData(mainItemId, mainRecipeData) {
       ingredientTreeWorker.removeEventListener('error', handleError);
       const serialized = event.data || [];
       ingredientTreeWorker = null;
-      const deserialized = serialized.map(obj => createCraftIngredientFromRecipe(obj, obj.parentMultiplier, mainItemId));
+      const deserialized = serialized.map(obj => createCraftIngredientFromRecipe(obj, obj.parentMultiplier, null));
       function linkParents(node, parent) {
         node._parent = parent;
+        node._parentId = parent ? parent._uid : null;
         if (node.children) node.children.forEach(child => linkParents(child, node));
       }
       deserialized.forEach(root => { linkParents(root, null); root.recalc(window.globalQty, null); });
@@ -405,7 +407,7 @@ export async function fetchRecipeData(outputItemId) {
   }
 }
 
-export function createCraftIngredientFromRecipe(recipe, parentMultiplier = 1, parentId = null) {
+export function createCraftIngredientFromRecipe(recipe, parentMultiplier = 1, parentUid = null) {
   const ingredient = new CraftIngredient({
     id: recipe.id,
     name: recipe.name,
@@ -417,10 +419,16 @@ export function createCraftIngredientFromRecipe(recipe, parentMultiplier = 1, pa
     sell_price: recipe.sell_price || 0,
     is_craftable: recipe.is_craftable || false,
     children: [],
-    _parentId: parentId
+    _parentId: parentUid
   });
   if (recipe.children && recipe.children.length > 0) {
-    ingredient.children = recipe.children.map(child => createCraftIngredientFromRecipe(structuredClone ? structuredClone(child) : JSON.parse(JSON.stringify(child)), child.count * parentMultiplier, ingredient.id));
+    ingredient.children = recipe.children.map(child =>
+      createCraftIngredientFromRecipe(
+        structuredClone ? structuredClone(child) : JSON.parse(JSON.stringify(child)),
+        child.count * parentMultiplier,
+        ingredient._uid
+      )
+    );
   }
   return ingredient;
 }

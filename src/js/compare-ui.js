@@ -4,9 +4,7 @@ import {
   setGlobalQty,
   snapshotExpandState,
   restoreExpandState,
-  findIngredientById,
-  findIngredientByIdAndParent,
-  findIngredientByPath,
+  findIngredientByUid,
   calcPercent,
   recalcAll,
   getTotals
@@ -124,14 +122,8 @@ if (!window._modeChangeHandlerInstalled) {
       const path = target.getAttribute('data-path');
       if (!path) return;
 
-      const pathArr = path.split('-');
-      const rootId = pathArr[0];
-      // Busca el objeto raíz correcto en el array principal
-      const rootNode = window.ingredientObjs.find(ing => String(ing.id) === String(rootId));
-      if (!rootNode) return;
-
-      // Usa una función de búsqueda que opere dentro del árbol del nodo raíz
-      const ingredient = findIngredientByPath([rootNode], pathArr);
+      const uid = path.split('-').pop();
+      const ingredient = findIngredientByUid(window.ingredientObjs || [], uid);
 
       if (ingredient) {
         let newMode = 'buy';
@@ -203,7 +195,7 @@ function renderMainItemRow(mainItem, qty, totalBuy, totalSell, totalCrafted) {
 }
 
 // --- Renderizado recursivo de ingredientes ---
-function renderRows(ings, nivel = 0, parentId = null, rowGroupIndex = 0, parentExpanded = true, path = []) {
+function renderRows(ings, nivel = 0, parentUid = null, rowGroupIndex = 0, parentExpanded = true, path = []) {
   if (!ings || !Array.isArray(ings)) return '';
 
   return ings.map((ing, idx) => {
@@ -216,7 +208,7 @@ function renderRows(ings, nivel = 0, parentId = null, rowGroupIndex = 0, parentE
     const rowBgClass = groupIdx % 2 === 0 ? 'row-bg-a' : 'row-bg-b';
     const indent = nivel > 0 ? `style="padding-left:${nivel * 30}px"` : '';
     const rarityClass = typeof getRarityClass === 'function' ? getRarityClass(ing.rarity) : '';
-    const currentPath = [...path, ing.id].join('-');
+    const currentPath = [...path, ing._uid].join('-');
     const expandButton = (ing.children && ing.children.length)
       ? `<button class="btn-expand" data-path="${currentPath}">${ing.expanded ? '▴' : '▾'}</button>` : '';
     
@@ -252,7 +244,7 @@ function renderRows(ings, nivel = 0, parentId = null, rowGroupIndex = 0, parentE
     const noCraftedMarketPrice = ing.is_craftable && ing.children && ing.children.length > 0;
 
     return `
-      <tr data-path="${currentPath}" class="${isChild ? `subrow subrow-${nivel} child-of-${parentId}` : ''} ${rowBgClass}" ${extraStyle}>
+      <tr data-path="${currentPath}" class="${isChild ? `subrow subrow-${nivel} child-of-${parentUid}` : ''} ${rowBgClass}" ${extraStyle}>
         <td class="th-border-left-items" ${indent}><img src="${ing.icon}" width="32"></td>
         <td><a href="/item?id=${ing.id}" class="item-link ${rarityClass}" target="_blank">${ing.name}</a></td>
         <td>${ing.countTotal ? (Number.isInteger(ing.countTotal) ? ing.countTotal : ing.countTotal.toFixed(2)) : ing.count}</td>
@@ -282,7 +274,7 @@ function renderRows(ings, nivel = 0, parentId = null, rowGroupIndex = 0, parentE
         
         <td class="th-border-right-items">${expandButton}</td>
       </tr>
-      ${(ing.children && ing.children.length && parentExpanded && ing.expanded) ? renderRows(ing.children, nivel + 1, ing.id, groupIdx, ing.expanded, [...path, ing.id]) : ''}
+      ${(ing.children && ing.children.length && parentExpanded && ing.expanded) ? renderRows(ing.children, nivel + 1, ing._uid, groupIdx, ing.expanded, [...path, ing._uid]) : ''}
     `;
   }).join('');
 }
@@ -296,11 +288,11 @@ function setAllExpandedFalse(ings) {
 }
 
 // --- Asigna _parentId de forma robusta a todo el árbol ---
-function asignarParentIds(nodos, parentId = "") {
+function asignarParentIds(nodos, parentUid = "") {
   nodos.forEach(ing => {
-    ing._parentId = parentId !== null ? String(parentId) : "";
+    ing._parentId = parentUid !== null ? String(parentUid) : "";
     if (Array.isArray(ing.children)) {
-      asignarParentIds(ing.children, ing.id);
+      asignarParentIds(ing.children, ing._uid);
     }
   });
 }
@@ -481,7 +473,7 @@ function renderCraftingSectionUI(totals, buyPrice = window._mainBuyPrice, sellPr
       <tbody>
         ${window.ingredientObjs.map(ing => `
           ${renderMainItemRow(ing, window.globalQty, ing.total_buy, ing.total_sell, ing.total_crafted)}
-          ${window._mainItemExpandedMap[ing.id] ? renderRows(ing.children, 1, ing.id, 0, true, [ing.id]) : ''}
+          ${window._mainItemExpandedMap[ing.id] ? renderRows(ing.children, 1, ing._uid, 0, true, [ing._uid]) : ''}
 `).join('')}
       </tbody>
     </table>
@@ -557,8 +549,8 @@ document.addEventListener('click', function(e) {
   if (e.target && e.target.classList.contains('btn-expand')) {
     const pathStr = e.target.getAttribute('data-path');
     if (!pathStr) return;
-    const path = pathStr.split('-').map(x => x.trim());
-    const ing = findIngredientByPath(window.ingredientObjs, path);
+    const uid = pathStr.split('-').pop();
+    const ing = findIngredientByUid(window.ingredientObjs || [], uid);
     if (ing) {
       ing.expanded = !ing.expanded;
       if (typeof safeRenderTable === 'function') safeRenderTable();
