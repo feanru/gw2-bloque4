@@ -140,7 +140,7 @@ export async function loadItem(itemId) {
       });
       rootIngredient.recalc(window.globalQty || 1, null);
       setIngredientObjs([rootIngredient]);
-      window.initItemUI(item, marketData);
+      await window.initItemUI(item, marketData);
 
       function collectIds(node, acc) {
         acc.add(node.id);
@@ -167,6 +167,16 @@ export async function loadItem(itemId) {
             });
           });
           await window.safeRenderTable?.();
+          if (!document.getElementById('seccion-crafting')) {
+            const retry = () => {
+              if (document.getElementById('seccion-crafting')) {
+                window.safeRenderTable?.();
+              } else {
+                requestAnimationFrame(retry);
+              }
+            };
+            requestAnimationFrame(retry);
+          }
 
           updatedNodes.forEach(({ id, ing }) => updateState(id, ing));
         };
