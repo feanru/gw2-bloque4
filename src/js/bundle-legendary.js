@@ -490,6 +490,7 @@ function adaptIngredientForWorker(ing) {
     buy_price: ing.buyPrice > 0 ? ing.buyPrice : null,
     sell_price: ing.sellPrice > 0 ? ing.sellPrice : null,
     is_craftable: Array.isArray(ing.components) && ing.components.length > 0,
+    parentMultiplier: ing.parentMultiplier,
     children: Array.isArray(ing.components) ? ing.components.map(adaptIngredientForWorker) : []
   };
 }
