@@ -125,7 +125,7 @@ export function renderRows(ings, nivel = 1, parentId = null, rowGroupIndex = 0, 
 // --- Renderizado SOLO del nodo raíz. Prohibido usar mainNode.total_buy, siempre usar getTotals() ---
 // --- Renderizado de la fila principal del ítem (nodo raíz) ---
 // --- SOLO del nodo raíz. Totales siempre desde getTotals(), que devuelve los totales globales calculados por recalcAll ---
-function renderMainItemRow(mainNode) {
+export function renderMainItemRow(mainNode) {
   if (!mainNode) return '';
 
   let childTotals = { totalBuy: 0, totalSell: 0 };
@@ -163,7 +163,7 @@ function renderMainItemRow(mainNode) {
       </td>
 
       <!-- Col 3: Cantidad -->
-      <td>${mainNode.countTotal || mainNode.count}</td>
+      <td>${mainNode.countTotal != null ? mainNode.countTotal : mainNode.count}</td>
 
       <!-- Col 4: Total Compra -->
       <td class="item-solo-buy">

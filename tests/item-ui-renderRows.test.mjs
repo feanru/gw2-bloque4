@@ -15,8 +15,9 @@ global.IntersectionObserver = class {
 };
 
 global.formatGoldColored = (value) => String(value);
+global.getTotals = () => ({ totalBuy: 1, totalSell: 1, totalCrafted: 1 });
 
-const { renderRows } = await import('../src/js/item-ui.js');
+const { renderRows, renderMainItemRow } = await import('../src/js/item-ui.js');
 
 const ingredient = {
   id: 1,
@@ -42,4 +43,26 @@ const html = renderRows([ingredient]);
 assert.ok(html.includes('<td>0</td>'));
 assert.ok(!html.includes('<td>5</td>'));
 
+// Test for renderMainItemRow with countTotal = 0
+const mainNode = {
+  id: 2,
+  _uid: 'uid2',
+  icon: 'icon.png',
+  name: 'Main',
+  countTotal: 0,
+  count: 7,
+  children: [{}], // triggers getTotals
+  buy_price: 0,
+  sell_price: 0,
+  total_crafted: null,
+  expanded: false,
+  rarity: 'common'
+};
+
+const mainHtml = renderMainItemRow(mainNode);
+
+assert.ok(mainHtml.includes('<td>0</td>'));
+assert.ok(!mainHtml.includes('<td>7</td>'));
+
 console.log('item-ui renderRows countTotal 0 test passed');
+console.log('item-ui renderMainItemRow countTotal 0 test passed');
