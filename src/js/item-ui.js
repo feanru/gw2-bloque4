@@ -91,7 +91,7 @@ function renderRows(ings, nivel = 1, parentId = null, rowGroupIndex = 0, parentE
     const rarityClass = typeof getRarityClass === 'function' ? getRarityClass(ing.rarity) : '';
     
     return `
-      <tr data-state-id="${ing.id}" data-path="${currentPath}" class="${isChild ? `subrow subrow-${nivel} ${extraClass}` : ''} ${rowBgClass}" ${extraStyle}>
+      <tr data-state-id="${currentPath}" data-path="${currentPath}" data-ing-id="${ing.id}" class="${isChild ? `subrow subrow-${nivel} ${extraClass}` : ''} ${rowBgClass}" ${extraStyle}>
         <td class="th-border-left-items" ${indent}><img data-src="${ing.icon}" width="32" class="lazy-img" alt=""></td>
         <td><a href="/item?id=${ing.id}" class="item-link ${rarityClass}" target="_blank">${ing.name}</a></td>
         <td>${ing.countTotal || ing.count}</td>
@@ -151,7 +151,7 @@ function renderMainItemRow(mainNode) {
   const expandBtn = `<button class="btn-expand-path" data-path="${mainNode._uid}">${mainNode.expanded ? '-' : '+'}</button>`;
 
   return `
-    <tr data-state-id="${mainNode.id}" class="ingred-row ${mainNode.expanded ? 'expanded' : ''}" data-item-id="${mainNode.id}">
+    <tr data-state-id="${mainNode._uid}" data-path="${mainNode._uid}" data-item-id="${mainNode.id}" data-ing-id="${mainNode.id}" class="ingred-row ${mainNode.expanded ? 'expanded' : ''}">
       <!-- Col 1: Ícono (SIN colspan) -->
       <td class="th-border-left-items">
         <img src="${mainNode.icon}" width="32">
@@ -577,8 +577,8 @@ async function renderItemUI(itemData, marketData) {
     document.getElementById('seccion-totales').innerHTML = '';
     document.getElementById('seccion-comparativa').innerHTML = '';
     document.getElementById('seccion-crafting').innerHTML = renderCraftingSectionUI();
-    document.querySelectorAll('#seccion-crafting tr[data-state-id]').forEach(row => {
-      const id = row.getAttribute('data-state-id');
+    document.querySelectorAll('#seccion-crafting tr[data-ing-id]').forEach(row => {
+      const id = row.getAttribute('data-ing-id');
       register(id, row, (ing) => {
         const buyCell = row.querySelector('.item-solo-buy');
         if (buyCell) buyCell.innerHTML = `<div>${formatGoldColored(ing.total_buy)}</div><div class="item-solo-precio">${formatGoldColored(ing.buy_price)} <span style="color: #c99b5b">c/u</span></div>`;
@@ -712,8 +712,8 @@ async function safeRenderTable() {
 
     // Renderizar de nuevo toda la sección
     seccion.innerHTML = renderCraftingSectionUI();
-    document.querySelectorAll('#seccion-crafting tr[data-state-id]').forEach(row => {
-      const id = row.getAttribute('data-state-id');
+    document.querySelectorAll('#seccion-crafting tr[data-ing-id]').forEach(row => {
+      const id = row.getAttribute('data-ing-id');
       register(id, row, (ing) => {
         const buyCell = row.querySelector('.item-solo-buy');
         if (buyCell) {
