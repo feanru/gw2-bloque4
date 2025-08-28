@@ -6,7 +6,7 @@ const observer = new IntersectionObserver(entries => {
     const el = entry.target;
     visibility.set(el, entry.isIntersecting);
     if (entry.isIntersecting) {
-      const id = el.dataset.ingId;
+      const id = el.dataset.stateId || el.dataset.path;
       if (!id) return;
       const list = renderers.get(id);
       if (!list) return;
@@ -21,11 +21,12 @@ const observer = new IntersectionObserver(entries => {
 });
 
 export function register(id, el, renderFn) {
-  el.dataset.ingId = id;
-  let list = renderers.get(String(id));
+  const key = String(id);
+  el.dataset.stateId = key;
+  let list = renderers.get(key);
   if (!list) {
     list = [];
-    renderers.set(String(id), list);
+    renderers.set(key, list);
   }
   list.push({ el, renderFn });
   observer.observe(el);
