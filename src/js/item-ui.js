@@ -63,7 +63,7 @@ function renderWiki(name) {
 
 
 // --- Renderizado recursivo de ingredientes ---
-function renderRows(ings, nivel = 1, parentId = null, rowGroupIndex = 0, parentExpanded = true, path = []) {
+export function renderRows(ings, nivel = 1, parentId = null, rowGroupIndex = 0, parentExpanded = true, path = []) {
   // DEPURACIÓN opcional de los radios renderizados
   // ings.forEach((ing, idx) => {
   //   if (nivel > 0) {
@@ -94,7 +94,7 @@ function renderRows(ings, nivel = 1, parentId = null, rowGroupIndex = 0, parentE
       <tr data-state-id="${currentPath}" data-path="${currentPath}" data-ing-id="${ing.id}" class="${isChild ? `subrow subrow-${nivel} ${extraClass}` : ''} ${rowBgClass}" ${extraStyle}>
         <td class="th-border-left-items" ${indent}><img data-src="${ing.icon}" width="32" class="lazy-img" alt=""></td>
         <td><a href="/item?id=${ing.id}" class="item-link ${rarityClass}" target="_blank">${ing.name}</a></td>
-        <td>${ing.countTotal || ing.count}</td>
+        <td>${ing.countTotal != null ? ing.countTotal : ing.count}</td>
         <td class="item-solo-buy">
           <div>${formatGoldColored(ing.total_buy)}</div>
           <div class="item-solo-precio">${formatGoldColored(ing.buy_price)} <span style="color: #c99b5b">c/u</span></div>
