@@ -122,16 +122,16 @@ function renderRows(ings, nivel = 1, parentId = null, rowGroupIndex = 0, parentE
 }
 
 // --- Renderizado de la fila principal del ítem (nodo raíz) ---
-// --- Renderizado SOLO del nodo raíz. Prohibido usar mainNode.total_buy, siempre usar getTotals(mainNode.children) ---
+// --- Renderizado SOLO del nodo raíz. Prohibido usar mainNode.total_buy, siempre usar getTotals() ---
 // --- Renderizado de la fila principal del ítem (nodo raíz) ---
-// --- SOLO del nodo raíz. Totales siempre desde getTotals(mainNode.children) ---
+// --- SOLO del nodo raíz. Totales siempre desde getTotals(), que devuelve los totales globales calculados por recalcAll ---
 function renderMainItemRow(mainNode) {
   if (!mainNode) return '';
 
   let childTotals = { totalBuy: 0, totalSell: 0 };
   let craftedFallback = 0;
   if (mainNode.children && mainNode.children.length > 0) {
-    const totalsFromChildren = getTotals(mainNode.children);
+    const totalsFromChildren = getTotals();
     childTotals.totalBuy = totalsFromChildren.totalBuy;
     childTotals.totalSell = totalsFromChildren.totalSell;
     craftedFallback = totalsFromChildren.totalCrafted;
@@ -206,11 +206,12 @@ function renderCraftingSectionUI() {
     outputCount = window._mainRecipeOutputCount;
   }
 
-  // --- Totales robustos: buy/sell desde los hijos, crafteo desde el nodo raíz ---
+  // --- Totales robustos: getTotals() entrega los totales globales calculados por recalcAll ---
+  // --- Buy/Sell se obtienen de esos totales; el crafteo proviene del nodo raíz ---
   let totals = { totalBuy: 0, totalSell: 0, totalCrafted: 0 };
   let childTotals = null;
   if (mainRoot && mainRoot.children && mainRoot.children.length > 0) {
-    childTotals = getTotals(mainRoot.children);
+    childTotals = getTotals();
     totals.totalBuy = childTotals.totalBuy;
     totals.totalSell = childTotals.totalSell;
   }
