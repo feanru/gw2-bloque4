@@ -11,6 +11,8 @@ import {
 import { register, update as updateState } from './utils/stateManager.js';
 import { initLazyImages, observeSection } from './utils/lazyLoader.js';
 
+// getTotals() siempre devuelve los totales globales calculados por recalcAll y no acepta parámetros.
+
 // Datos básicos y de mercado del ítem se almacenan
 // temporalmente hasta que estén disponibles todos
 // los detalles necesarios para inicializar la UI.

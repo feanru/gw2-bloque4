@@ -181,6 +181,7 @@ export function recalcAll(ingredientObjs, globalQty) {
 
 // Devuelve los últimos totales globales calculados por recalcAll.
 // Siempre ejecutar recalcAll antes de llamar para obtener datos actualizados.
+// Siempre retorna los totales globales y no acepta parámetros.
 export function getTotals() {
   return lastTotals;
 }
