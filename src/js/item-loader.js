@@ -141,6 +141,7 @@ export async function loadItem(itemId) {
       rootIngredient.recalc(window.globalQty || 1, null);
       setIngredientObjs([rootIngredient]);
       await window.initItemUI(item, marketData);
+      await window.safeRenderTable?.();
 
       function collectIds(node, acc) {
         acc.add(node.id);
