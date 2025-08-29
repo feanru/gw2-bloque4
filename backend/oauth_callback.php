@@ -1,5 +1,11 @@
 <?php
 require_once __DIR__.'/config.php';
+session_set_cookie_params([
+    'path' => '/',
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'None'
+]);
 session_start();
 header('Content-Type: text/html');
 
