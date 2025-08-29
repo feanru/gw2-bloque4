@@ -66,7 +66,7 @@ export function renderRows(ings, nivel = 1, parentId = null, rowGroupIndex = 0, 
     const rarityClass = typeof getRarityClass === 'function' ? getRarityClass(ing.rarity) : '';
     
     return `
-      <tr data-state-id="${currentPath}" data-path="${currentPath}" class="${isChild ? `subrow subrow-${nivel} ${extraClass}` : ''} ${rowBgClass}" ${extraStyle}>
+      <tr data-state-id="${ing._uid}" data-path="${currentPath}" class="${isChild ? `subrow subrow-${nivel} ${extraClass}` : ''} ${rowBgClass}" ${extraStyle}>
         <td class="th-border-left-items" ${indent}><img data-src="${ing.icon}" width="32" class="lazy-img" alt=""></td>
         <td><a href="/item?id=${ing.id}" class="item-link ${rarityClass}" target="_blank">${ing.name}</a></td>
         <td>${ing.countTotal ?? ing.count}</td>
