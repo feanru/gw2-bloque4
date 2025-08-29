@@ -31,7 +31,11 @@ class GuildWars2API {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = await response.json();
+
+      // Clone the response to parse the body without consuming the original
+      const cloned = response.clone();
+      const data = await cloned.json();
+
       if (useCache) {
         setCached(cacheKey, data, this.CACHE_DURATION);
       }
