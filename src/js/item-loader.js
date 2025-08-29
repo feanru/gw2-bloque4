@@ -158,15 +158,6 @@ export async function loadItem(itemId) {
             return;
           }
           const updatedNodes = [];
-          const buildPath = (ing) => {
-            const path = [];
-            let current = ing;
-            while (current) {
-              path.unshift(current._uid);
-              current = current._parent;
-            }
-            return path.join('-');
-          };
           priceMap.forEach((data, id) => {
             const ings = findIngredientsById(window.ingredientObjs, Number(id));
             if (!ings.length) return;
@@ -177,13 +168,12 @@ export async function loadItem(itemId) {
                 window._mainBuyPrice = ing.buy_price;
                 window._mainSellPrice = ing.sell_price;
               }
-              const path = buildPath(ing);
-              updatedNodes.push({ path, ing });
+              updatedNodes.push(ing);
             });
           });
           await recalcAll(window.ingredientObjs, window.globalQty || 1);
           await window.safeRenderTable?.();
-          updatedNodes.forEach(({ path, ing }) => updateState(path, ing));
+          updatedNodes.forEach(ing => updateState(ing._uid, ing));
           updateState('totales-crafting', window.getTotals?.());
         };
         stopPriceUpdater = startPriceUpdater(idsArray, applyPrices);
