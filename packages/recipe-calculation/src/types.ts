@@ -1,4 +1,4 @@
-import type { NestedRecipe as NestedRecipeTree } from '@gw2efficiency/recipe-nesting'
+import type { NestedRecipe as NestedRecipeTree } from 'recipe-nesting'
 
 type ExtendRecipeTree<TBaseTree, TProperties> = Omit<TBaseTree, 'type' | 'components'> & {
   type: 'Recipe' | 'Item' | 'Currency'

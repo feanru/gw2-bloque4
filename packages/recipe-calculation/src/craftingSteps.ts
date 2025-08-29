@@ -1,4 +1,4 @@
-import { Prerequisites } from '@gw2efficiency/recipe-nesting'
+import { Prerequisites } from 'recipe-nesting'
 import { RecipeTreeWithCraftFlags } from './types'
 
 const MYSTIC_CLOVER_ID = 19675
