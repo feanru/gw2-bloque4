@@ -14,6 +14,9 @@ if (typeof window !== 'undefined') {
 }
 
 export function setIngredientObjs(val) {
+  if (Array.isArray(val)) {
+    restoreCraftIngredientPrototypes(val, null);
+  }
   window.ingredientObjs = val;
 }
 
@@ -116,6 +119,23 @@ export class CraftIngredient {
 
 CraftIngredient.nextUid = 0;
 
+export function restoreCraftIngredientPrototypes(nodes, parent = null) {
+  if (!Array.isArray(nodes)) return;
+  for (const node of nodes) {
+    Object.setPrototypeOf(node, CraftIngredient.prototype);
+    if (typeof node._uid === 'number' && CraftIngredient.nextUid <= node._uid) {
+      CraftIngredient.nextUid = node._uid + 1;
+    }
+    node._parent = parent;
+    if (parent) node._parentId = parent._uid;
+    if (Array.isArray(node.children) && node.children.length > 0) {
+      restoreCraftIngredientPrototypes(node.children, node);
+    } else {
+      node.children = [];
+    }
+  }
+}
+
 export function setGlobalQty(val) {
   window.globalQty = val;
 }
@@ -152,6 +172,9 @@ export function recalcAll(ingredientObjs, globalQty) {
       costsWorker.removeEventListener('message', handleMessage);
       costsWorker.removeEventListener('error', handleError);
       const { updatedTree, totals } = e.data || {};
+      if (Array.isArray(updatedTree)) {
+        restoreCraftIngredientPrototypes(updatedTree, null);
+      }
       function apply(src, dest) {
         Object.assign(dest, src);
         if (src.children && dest.children) {
@@ -331,12 +354,8 @@ export async function prepareIngredientTreeData(mainItemId, mainRecipeData) {
     const deserialized = (mainRecipeData.nested_recipe || []).map(obj =>
       createCraftIngredientFromRecipe(obj, obj.parentMultiplier, null)
     );
-    function linkParents(node, parent) {
-      node._parent = parent;
-      node._parentId = parent ? parent._uid : null;
-      if (node.children) node.children.forEach(child => linkParents(child, node));
-    }
-    deserialized.forEach(root => { linkParents(root, null); root.recalc(window.globalQty, null); });
+    restoreCraftIngredientPrototypes(deserialized, null);
+    deserialized.forEach(root => root.recalc(window.globalQty, null));
     return deserialized;
   }
 
@@ -350,15 +369,11 @@ export async function prepareIngredientTreeData(mainItemId, mainRecipeData) {
     const handleMessage = (event) => {
       ingredientTreeWorker.removeEventListener('message', handleMessage);
       ingredientTreeWorker.removeEventListener('error', handleError);
-      const serialized = event.data || [];
+      const serialized = event.data?.tree || [];
       ingredientTreeWorker = null;
       const deserialized = serialized.map(obj => createCraftIngredientFromRecipe(obj, obj.parentMultiplier, null));
-      function linkParents(node, parent) {
-        node._parent = parent;
-        node._parentId = parent ? parent._uid : null;
-        if (node.children) node.children.forEach(child => linkParents(child, node));
-      }
-      deserialized.forEach(root => { linkParents(root, null); root.recalc(window.globalQty, null); });
+      restoreCraftIngredientPrototypes(deserialized, null);
+      deserialized.forEach(root => root.recalc(window.globalQty, null));
       resolve(deserialized);
     };
     const handleError = (err) => {
