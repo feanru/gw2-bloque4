@@ -152,6 +152,10 @@ export async function loadItem(itemId) {
         if (stopPriceUpdater) stopPriceUpdater();
         const idsArray = Array.from(allIds);
         const applyPrices = async (priceMap) => {
+          if (!document.getElementById('seccion-crafting')) {
+            requestAnimationFrame(() => applyPrices(priceMap));
+            return;
+          }
           const updatedNodes = [];
           const buildPath = (ing) => {
             const path = [];
@@ -176,19 +180,9 @@ export async function loadItem(itemId) {
               updatedNodes.push({ path, ing });
             });
           });
-          await window.safeRenderTable?.();
-          if (!document.getElementById('seccion-crafting')) {
-            const retry = () => {
-              if (document.getElementById('seccion-crafting')) {
-                window.safeRenderTable?.();
-              } else {
-                requestAnimationFrame(retry);
-              }
-            };
-            requestAnimationFrame(retry);
-          }
-
+          await recalcAll(window.ingredientObjs, window.globalQty || 1);
           updatedNodes.forEach(({ path, ing }) => updateState(path, ing));
+          await window.safeRenderTable?.();
         };
         stopPriceUpdater = startPriceUpdater(idsArray, applyPrices);
       }, 0);
