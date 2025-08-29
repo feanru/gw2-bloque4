@@ -19,9 +19,22 @@ function require_env($name) {
     return $value;
 }
 
+$debug = filter_var(getenv('DEBUG'), FILTER_VALIDATE_BOOLEAN);
+
 if (empty($_GET['state']) || $_GET['state'] !== ($_SESSION['oauth_state'] ?? '')) {
     http_response_code(400);
-    echo 'Invalid state';
+    error_log('Invalid state: GET state='.(isset($_GET['state']) ? $_GET['state'] : 'null'));
+    error_log('Invalid state: SESSION state='.(isset($_SESSION['oauth_state']) ? $_SESSION['oauth_state'] : 'null'));
+    if ($debug) {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'error' => 'invalid_state',
+            'get_state' => $_GET['state'] ?? null,
+            'session_state' => $_SESSION['oauth_state'] ?? null
+        ]);
+    } else {
+        echo 'Invalid state';
+    }
     exit;
 }
 
