@@ -1,10 +1,18 @@
 <?php
 require_once __DIR__.'/env.php';
+session_set_cookie_params([
+    'path' => '/',
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'None'
+]);
 session_start();
+header('Cache-Control: no-store, no-cache, must-revalidate');
 $provider = $_GET['provider'] ?? '';
 $state = bin2hex(random_bytes(16));
 $_SESSION['oauth_state'] = $state;
 $_SESSION['oauth_provider'] = $provider;
+session_write_close();
 $redirect = getenv('OAUTH_REDIRECT_URI') ?: 'http://localhost/backend/oauth_callback.php';
 
 function require_env($name) {
