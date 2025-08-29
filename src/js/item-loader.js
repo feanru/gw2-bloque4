@@ -172,6 +172,11 @@ export async function loadItem(itemId) {
             });
           });
           await window.safeRenderTable?.();
+          const totals = window.getTotals?.();
+          if (totals) {
+            updateState('totales-crafting-global', totals);
+            updateState('totales-crafting-unit', totals);
+          }
           updatedNodes.forEach(ing => updateState(ing._uid, ing));
         };
         stopPriceUpdater = startPriceUpdater(idsArray, applyPrices);
