@@ -1,4 +1,8 @@
-// GW2 Item Tracker v2 - UI Y PRESENTACIÓN (item-ui.js)
+/**
+ * GW2 Item Tracker v2 - UI Y PRESENTACIÓN (item-ui.js)
+ *
+ * getTotals() siempre devuelve los totales globales calculados por recalcAll y no acepta parámetros.
+ */
 
 import {
   showSkeleton,
@@ -10,8 +14,6 @@ import {
 } from './ui-helpers.js';
 import { register, update as updateState } from './utils/stateManager.js';
 import { initLazyImages, observeSection } from './utils/lazyLoader.js';
-
-// getTotals() siempre devuelve los totales globales calculados por recalcAll y no acepta parámetros.
 
 // Helpers para el input de cantidad global y mensajes de error se
 // comparten ahora desde ui-helpers.js
