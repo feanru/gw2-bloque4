@@ -736,6 +736,7 @@ async function safeRenderTable() {
         if (craftedCell) craftedCell.innerHTML = formatGoldColored(totals.totalCrafted / divisor);
       });
     });
+    updateState('totales-crafting', getTotals());
 
     // Restaurar el valor del input y el estado de los expandibles
     const newQtyInput = document.getElementById('qty-global');
