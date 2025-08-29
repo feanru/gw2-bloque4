@@ -39,9 +39,9 @@ const ingredient = {
 };
 
 const html = renderRows([ingredient]);
-
-assert.ok(html.includes('<td>0</td>'));
-assert.ok(!html.includes('<td>5</td>'));
+const matchZero = html.match(/<td>(\d+)<\/td>/);
+assert.ok(matchZero, 'Debe renderizar una celda de cantidad');
+assert.strictEqual(matchZero[1], '0', 'countTotal=0 debe mostrarse correctamente');
 
 // countTotal undefined should fall back to count
 const ingredientFallback = {
@@ -52,8 +52,9 @@ const ingredientFallback = {
 };
 
 const htmlFallback = renderRows([ingredientFallback]);
-
-assert.ok(htmlFallback.includes('<td>4</td>'));
+const matchFallback = htmlFallback.match(/<td>(\d+)<\/td>/);
+assert.ok(matchFallback, 'Debe renderizar una celda de cantidad para fallback');
+assert.strictEqual(matchFallback[1], '4', 'Debe usar count cuando countTotal es undefined');
 
 // Test for renderMainItemRow with countTotal = 0
 const mainNode = {
@@ -72,9 +73,9 @@ const mainNode = {
 };
 
 const mainHtml = renderMainItemRow(mainNode);
-
-assert.ok(mainHtml.includes('<td>0</td>'));
-assert.ok(!mainHtml.includes('<td>7</td>'));
+const matchMain = mainHtml.match(/<td>(\d+)<\/td>/);
+assert.ok(matchMain, 'Debe renderizar una celda de cantidad en la fila principal');
+assert.strictEqual(matchMain[1], '0', 'countTotal=0 debe mostrarse en la fila principal');
 
 console.log('item-ui renderRows countTotal 0 test passed');
 console.log('item-ui renderMainItemRow countTotal 0 test passed');
