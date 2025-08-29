@@ -13,33 +13,6 @@ import { initLazyImages, observeSection } from './utils/lazyLoader.js';
 
 // getTotals() siempre devuelve los totales globales calculados por recalcAll y no acepta parámetros.
 
-// Datos básicos y de mercado del ítem se almacenan
-// temporalmente hasta que estén disponibles todos
-// los detalles necesarios para inicializar la UI.
-let itemData = null;
-let marketData = null;
-
-// Actualiza la data básica del ítem
-document.addEventListener('item-basic', (e) => {
-  itemData = e.detail;
-});
-
-// Actualiza la data de mercado del ítem
-document.addEventListener('item-market', (e) => {
-  marketData = e.detail;
-});
-
-// Cuando lleguen los ingredientes, inicia la UI si
-// se tienen ambos datos previos y re-renderiza la tabla
-document.addEventListener('item-ingredients', () => {
-  if (itemData && marketData) {
-    initItemUI(itemData, marketData);
-    if (typeof safeRenderTable === 'function') {
-      safeRenderTable();
-    }
-  }
-});
-
 // Helpers para el input de cantidad global y mensajes de error se
 // comparten ahora desde ui-helpers.js
 
