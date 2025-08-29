@@ -721,8 +721,8 @@ async function safeRenderTable() {
       const isUnit = totEl.closest('.table-modern-totales')
         ?.querySelector('h3')
         ?.textContent?.includes('unidad');
-      register('totales-crafting', totEl, () => {
-        const totals = getTotals();
+      const stateId = isUnit ? 'totales-crafting-unit' : 'totales-crafting-global';
+      register(stateId, totEl, (totals) => {
         const divisor = isUnit
           ? (window._mainRecipeOutputCount && !isNaN(window._mainRecipeOutputCount)
             ? window._mainRecipeOutputCount
@@ -736,7 +736,9 @@ async function safeRenderTable() {
         if (craftedCell) craftedCell.innerHTML = formatGoldColored(totals.totalCrafted / divisor);
       });
     });
-    updateState('totales-crafting', getTotals());
+    const totals = getTotals();
+    updateState('totales-crafting-global', totals);
+    updateState('totales-crafting-unit', totals);
 
     // Restaurar el valor del input y el estado de los expandibles
     const newQtyInput = document.getElementById('qty-global');
