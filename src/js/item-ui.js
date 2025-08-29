@@ -739,6 +739,27 @@ async function safeRenderTable() {
       });
     });
 
+    // Registrar nodos de totales para actualizaciones incrementales
+    document.querySelectorAll('#totales-crafting').forEach(totEl => {
+      const isUnit = totEl.closest('.table-modern-totales')
+        ?.querySelector('h3')
+        ?.textContent?.includes('unidad');
+      register('totales-crafting', totEl, () => {
+        const totals = getTotals();
+        const divisor = isUnit
+          ? (window._mainRecipeOutputCount && !isNaN(window._mainRecipeOutputCount)
+            ? window._mainRecipeOutputCount
+            : 1)
+          : 1;
+        const buyCell = totEl.querySelector('.item-solo-buy');
+        if (buyCell) buyCell.innerHTML = formatGoldColored(totals.totalBuy / divisor);
+        const sellCell = totEl.querySelector('.item-solo-sell');
+        if (sellCell) sellCell.innerHTML = formatGoldColored(totals.totalSell / divisor);
+        const craftedCell = totEl.querySelector('.item-solo-crafted');
+        if (craftedCell) craftedCell.innerHTML = formatGoldColored(totals.totalCrafted / divisor);
+      });
+    });
+
     // Restaurar el valor del input y el estado de los expandibles
     const newQtyInput = document.getElementById('qty-global');
     if (newQtyInput) {
