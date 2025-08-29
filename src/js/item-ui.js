@@ -96,7 +96,7 @@ export function renderRows(ings, nivel = 1, parentId = null, rowGroupIndex = 0, 
       <tr data-state-id="${currentPath}" data-path="${currentPath}" class="${isChild ? `subrow subrow-${nivel} ${extraClass}` : ''} ${rowBgClass}" ${extraStyle}>
         <td class="th-border-left-items" ${indent}><img data-src="${ing.icon}" width="32" class="lazy-img" alt=""></td>
         <td><a href="/item?id=${ing.id}" class="item-link ${rarityClass}" target="_blank">${ing.name}</a></td>
-        <td>${ing.countTotal != null ? ing.countTotal : ing.count}</td>
+        <td>${ing.countTotal ?? ing.count}</td>
         <td class="item-solo-buy">
           <div>${formatGoldColored(ing.total_buy)}</div>
           <div class="item-solo-precio">${formatGoldColored(ing.buy_price)} <span style="color: #c99b5b">c/u</span></div>

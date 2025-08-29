@@ -43,6 +43,18 @@ const html = renderRows([ingredient]);
 assert.ok(html.includes('<td>0</td>'));
 assert.ok(!html.includes('<td>5</td>'));
 
+// countTotal undefined should fall back to count
+const ingredientFallback = {
+  ...ingredient,
+  _uid: 'uid1b',
+  countTotal: undefined,
+  count: 4
+};
+
+const htmlFallback = renderRows([ingredientFallback]);
+
+assert.ok(htmlFallback.includes('<td>4</td>'));
+
 // Test for renderMainItemRow with countTotal = 0
 const mainNode = {
   id: 2,
