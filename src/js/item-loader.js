@@ -183,6 +183,9 @@ export async function loadItem(itemId) {
           });
           await recalcAll(window.ingredientObjs, window.globalQty || 1);
           updatedNodes.forEach(({ path, ing }) => updateState(path, ing));
+          if (!document.querySelector('#totales-crafting[data-state-id]')) {
+            await window.safeRenderTable?.();
+          }
           updateState('totales-crafting', window.getTotals?.());
         };
         stopPriceUpdater = startPriceUpdater(idsArray, applyPrices);
