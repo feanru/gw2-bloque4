@@ -6,7 +6,7 @@ import {
   NestedRecipe,
   BasicCurrencyComponent,
   BasicItemComponent,
-} from '@gw2efficiency/recipe-nesting'
+} from 'recipe-nesting'
 
 export function cheapestTree(
   amount: number,
