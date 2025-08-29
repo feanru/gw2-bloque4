@@ -171,7 +171,6 @@ export async function loadItem(itemId) {
               updatedNodes.push(ing);
             });
           });
-          await recalcAll(window.ingredientObjs, window.globalQty || 1);
           await window.safeRenderTable?.();
           updatedNodes.forEach(ing => updateState(ing._uid, ing));
         };
