@@ -1,4 +1,5 @@
 import { showSkeleton, hideSkeleton } from './ui-helpers.js';
+import { restoreCraftIngredientPrototypes } from './items-core.js';
 const { fetchItemData, fetchPriceData } = window.DonesCore || {};
 // js/dones.js
 
@@ -159,6 +160,7 @@ function runCostsWorker(ingredientTree, globalQty) {
 async function buildWorkerTree(ings) {
   const { ingredientTree } = await runDonesWorker(ings);
   const { updatedTree, totals } = await runCostsWorker(ingredientTree, 1);
+  restoreCraftIngredientPrototypes(updatedTree, null);
   return { tree: updatedTree, totals };
 }
 
