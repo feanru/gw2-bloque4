@@ -2,15 +2,17 @@
 
 This repository contains the scripts used by the site. Source files are kept in `src/js` and the distributable, minified versions live in `/dist/js/`.
 
-Run `npm run build` to regenerate the bundles. The command uses Rollup to transform each file under `src/js` into `/dist/js/<name>.min.js`.
+Run `npm run build` to regenerate the bundles. The command uses Rollup to transform each file under `src/js` into `/dist/js/<name>.min.js`. Cada compilación genera un hash nuevo para cada archivo y el resultado final se detalla en `dist/manifest.json`.
 
-Include the bundles from `/dist/js/` in your HTML pages:
+Include the bundles from `/dist/js/` in your HTML pages. Los nombres incluyen un hash y pueden consultarse en `dist/manifest.json`:
 
 ```html
-<script src="/dist/js/bundle-legendary.B3Au4VNc.min.js"></script>
+<script src="/dist/js/bundle-legendary.<hash>.min.js"></script>
 ```
 
-After loading `/dist/js/bundle-legendary.B3Au4VNc.min.js` a global object `window.LegendaryData` becomes available with the following properties:
+Reemplaza `<hash>` con el valor encontrado en `dist/manifest.json`. Este hash se regenera cada vez que se compila.
+
+After loading `/dist/js/bundle-legendary.<hash>.min.js` (consulta `dist/manifest.json` para obtener el hash actual) a global object `window.LegendaryData` becomes available with the following properties:
 
 - `LEGENDARY_ITEMS` – mapping of first generation legendary items.
 - `LEGENDARY_ITEMS_3GEN` – mapping of third generation legendary weapons.
@@ -20,7 +22,7 @@ After loading `/dist/js/bundle-legendary.B3Au4VNc.min.js` a global object `windo
 Example usage:
 
 ```html
-<script src="/dist/js/bundle-legendary.B3Au4VNc.min.js"></script>
+<script src="/dist/js/bundle-legendary.<hash>.min.js"></script>
 <script>
   const { LEGENDARY_ITEMS } = window.LegendaryData;
   console.log(Object.keys(LEGENDARY_ITEMS));

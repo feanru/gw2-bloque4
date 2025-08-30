@@ -2,7 +2,7 @@
 
 This repository contains the scripts used by the site. Source files are kept in `src/js` and the distributable, minified versions live in `/dist/js/`.
 
-Run `npm run build` to regenerate the bundles. Before compiling it removes any previous output in `dist/js` and `dist/manifest.json` to avoid stale assets. The command uses Rollup to transform each file under `src/js` into `/dist/js/<name>.min.js` and, once finished, runs a CDN purge so clients receive the new routes.
+Run `npm run build` to regenerate the bundles. Before compiling it removes any previous output in `dist/js` and `dist/manifest.json` to avoid stale assets. The command uses Rollup to transform each file under `src/js` into `/dist/js/<name>.min.js` and, once finished, runs a CDN purge so clients receive the new routes. Cada compilación genera un hash nuevo para cada archivo y el resultado final se detalla en `dist/manifest.json`.
 
 ### Build y despliegue
 
@@ -10,11 +10,13 @@ Run `npm run build` to regenerate the bundles. Before compiling it removes any p
 2. Al finalizar, el script `postbuild` invoca `scripts/purge-cdn.js` para invalidar caches de Cloudflare. Define `CLOUDFLARE_ZONE_ID` y `CLOUDFLARE_TOKEN` en el entorno para que la operación tenga éxito.
 3. Publica el contenido de `dist/` en tu servidor o CDN. Los recursos incluyen hashes y deben servirse con `Cache-Control: no-cache`.
 
-Include the bundles from `/dist/js/` in your HTML pages:
+Include the bundles from `/dist/js/` in your HTML pages. Los nombres incluyen un hash y pueden consultarse en `dist/manifest.json`:
 
 ```html
-<script src="/dist/js/bundle-legendary.B3Au4VNc.min.js"></script>
+<script src="/dist/js/bundle-legendary.<hash>.min.js"></script>
 ```
+
+Reemplaza `<hash>` con el valor encontrado en `dist/manifest.json`. Este hash se regenera cada vez que se compila.
 
 ## Pruebas
 
@@ -33,7 +35,7 @@ Las pruebas sólo requieren Node.js y las dependencias instaladas (`mongodb` y `
 
 Los archivos HTML referencian recursos con hash y se sirven con `Cache-Control: no-cache` para que los navegadores obtengan siempre la versión más reciente. Tras cada despliegue, invalida las cachés de la CDN o de Cloudflare para forzar la actualización de estos archivos.
 
-After loading `/dist/js/bundle-legendary.B3Au4VNc.min.js` a global object `window.LegendaryData` becomes available with the following properties:
+After loading `/dist/js/bundle-legendary.<hash>.min.js` (consulta `dist/manifest.json` para obtener el hash actual) a global object `window.LegendaryData` becomes available with the following properties:
 
 - `LEGENDARY_ITEMS` – mapping of first generation legendary items.
 - `LEGENDARY_ITEMS_3GEN` – mapping of third generation legendary weapons.
@@ -43,7 +45,7 @@ After loading `/dist/js/bundle-legendary.B3Au4VNc.min.js` a global object `windo
 Example usage:
 
 ```html
-<script src="/dist/js/bundle-legendary.B3Au4VNc.min.js"></script>
+<script src="/dist/js/bundle-legendary.<hash>.min.js"></script>
 <script>
   const { LEGENDARY_ITEMS } = window.LegendaryData;
   console.log(Object.keys(LEGENDARY_ITEMS));
