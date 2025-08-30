@@ -3230,8 +3230,9 @@ class LegendaryCraftingBase {
       const sellPrice = component.sellPrice > 0 ? component.sellPrice * component.count : 0;
       if ((buyPrice === 0 || sellPrice === 0) && component.components && component.components.length > 0) {
         const compPrices = this.calculateComponentsPrice(component);
-        const scaledBuy = compPrices.buy * component.count;
-        const scaledSell = compPrices.sell * component.count;
+        const divisor = component.recipe?.output_item_count || component.parentMultiplier || 1;
+        const scaledBuy = (compPrices.buy / divisor) * component.count;
+        const scaledSell = (compPrices.sell / divisor) * component.count;
         return {
           buy: totals.buy + (buyPrice > 0 ? buyPrice : scaledBuy),
           sell: totals.sell + (sellPrice > 0 ? sellPrice : scaledSell)

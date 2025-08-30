@@ -49,4 +49,36 @@ const mixedTree = {
 }
 assert.deepStrictEqual(calc.calculateComponentsPrice(mixedTree), { buy: 13, sell: 18 })
 
+// Component with recipe output count > 1
+const multiOutputTree = {
+  components: [
+    {
+      buyPrice: 0,
+      sellPrice: 0,
+      count: 2,
+      recipe: { output_item_count: 3 },
+      components: [
+        { buyPrice: 3, sellPrice: 6, count: 3, components: [] }
+      ]
+    }
+  ]
+}
+assert.deepStrictEqual(calc.calculateComponentsPrice(multiOutputTree), { buy: 6, sell: 12 })
+
+// Component using parentMultiplier fallback
+const parentMultiplierTree = {
+  components: [
+    {
+      buyPrice: 0,
+      sellPrice: 0,
+      count: 2,
+      parentMultiplier: 4,
+      components: [
+        { buyPrice: 4, sellPrice: 8, count: 4, components: [] }
+      ]
+    }
+  ]
+}
+assert.deepStrictEqual(calc.calculateComponentsPrice(parentMultiplierTree), { buy: 8, sell: 16 })
+
 console.log('calculateComponentsPrice test passed')
