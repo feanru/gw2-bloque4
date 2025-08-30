@@ -436,6 +436,7 @@ export function createCraftIngredientFromRecipe(recipe, parentMultiplier = 1, pa
     sell_price: recipe.sell_price || 0,
     is_craftable: recipe.is_craftable || false,
     children: [],
+    parentMultiplier,
     _parentId: parentUid
   });
   if (recipe.children && recipe.children.length > 0) {
