@@ -368,8 +368,15 @@ export async function prepareIngredientTreeData(mainItemId, mainRecipeData) {
     const handleMessage = (event) => {
       ingredientTreeWorker.removeEventListener('message', handleMessage);
       ingredientTreeWorker.removeEventListener('error', handleError);
-      const serialized = event.data?.tree || [];
+      let serialized = event.data?.tree || [];
       ingredientTreeWorker = null;
+      if (!Array.isArray(serialized)) {
+        if (serialized && typeof serialized === 'object') {
+          serialized = Array.isArray(serialized.children) ? serialized.children : [serialized];
+        } else {
+          serialized = [];
+        }
+      }
       const deserialized = serialized.map(obj => createCraftIngredientFromRecipe(obj, obj.parentMultiplier, null));
       restoreCraftIngredientPrototypes(deserialized, null);
       deserialized.forEach(root => root.recalc(window.globalQty, null));
