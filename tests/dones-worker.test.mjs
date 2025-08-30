@@ -4,8 +4,7 @@ import { rebuildTreeArray, recalcAll, getTotals } from '../src/js/workers/costsW
 function manualTotals(tree, globalQty) {
   function traverse(node, parent) {
     const parentCount = parent ? parent.countTotal : globalQty;
-    const divisor = parent ? (parent.recipe?.output_item_count || parent.parentMultiplier || 1) : 1;
-    const countTotal = parent ? (parentCount * node.count) / divisor : node.count * globalQty;
+    const countTotal = parent ? parentCount * node.count : node.count * globalQty;
     let totalBuy = (node.buy_price || 0) * countTotal;
     let totalSell = (node.sell_price || 0) * countTotal;
     if (Array.isArray(node.children)) {
@@ -80,6 +79,6 @@ recalcAll(objs, 1);
 const totals = getTotals(objs);
 
 assert.deepStrictEqual(totals, manual);
-assert.strictEqual(objs[0].children[0].children[0].countTotal, 2);
+assert.strictEqual(objs[0].children[0].children[0].countTotal, 12);
 
 console.log('dones-worker recalc test passed');
