@@ -343,8 +343,9 @@ class Ingredient {
 
     // Si todos los componentes tienen precio, actualizamos este ítem
     if (todosTienenPrecio && totalBuy > 0 && !this._priceLoaded) {
-      this._buyPrice = totalBuy;
-      this._sellPrice = totalSell;
+      const unitCount = this.count || 1;
+      this._buyPrice = totalBuy / unitCount;
+      this._sellPrice = totalSell / unitCount;
       this._priceLoaded = true;
     }
 
@@ -761,8 +762,9 @@ class Ingredient3 {
 
     // Si todos los componentes tienen precio, actualizamos este ítem
     if (todosTienenPrecio && totalBuy > 0 && !this._priceLoaded) {
-      this._buyPrice = totalBuy;
-      this._sellPrice = totalSell;
+      const unitCount = this.count || 1;
+      this._buyPrice = totalBuy / unitCount;
+      this._sellPrice = totalSell / unitCount;
       this._priceLoaded = true;
     }
 
