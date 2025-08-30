@@ -32,9 +32,9 @@ const root = new CraftIngredient({
 
 root.recalc(1, null);
 
-assert.strictEqual(mid.countTotal, 1);
-assert.strictEqual(leaf.countTotal, 2);
-assert.strictEqual(leaf.total_buy, 20);
-assert.strictEqual(root.total_buy, 20);
+assert.strictEqual(mid.countTotal, 2);
+assert.strictEqual(leaf.countTotal, 12);
+assert.strictEqual(leaf.total_buy, 120);
+assert.strictEqual(root.total_buy, 120);
 
 console.log('items-core recalc test passed');
