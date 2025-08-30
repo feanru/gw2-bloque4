@@ -7,10 +7,10 @@ Run `npm run build` to regenerate the bundles. The command uses Rollup to transf
 Include the bundles from `/dist/js/` in your HTML pages:
 
 ```html
-<script src="/dist/js/bundle-legendary.min.js"></script>
+<script src="/dist/js/bundle-legendary.B3Au4VNc.min.js"></script>
 ```
 
-After loading `/dist/js/bundle-legendary.min.js` a global object `window.LegendaryData` becomes available with the following properties:
+After loading `/dist/js/bundle-legendary.B3Au4VNc.min.js` a global object `window.LegendaryData` becomes available with the following properties:
 
 - `LEGENDARY_ITEMS` – mapping of first generation legendary items.
 - `LEGENDARY_ITEMS_3GEN` – mapping of third generation legendary weapons.
@@ -20,7 +20,7 @@ After loading `/dist/js/bundle-legendary.min.js` a global object `window.Legenda
 Example usage:
 
 ```html
-<script src="/dist/js/bundle-legendary.min.js"></script>
+<script src="/dist/js/bundle-legendary.B3Au4VNc.min.js"></script>
 <script>
   const { LEGENDARY_ITEMS } = window.LegendaryData;
   console.log(Object.keys(LEGENDARY_ITEMS));
