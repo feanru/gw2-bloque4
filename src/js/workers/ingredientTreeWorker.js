@@ -13,7 +13,7 @@ self.onmessage = async (e) => {
 async function prepareIngredientTreeData(mainItemId) {
   const rootNested = await fetchWithCache(`/recipe-tree/${mainItemId}`).then((r) => r.json());
   if (!rootNested || !rootNested.components || rootNested.components.length === 0) {
-    return null;
+    return [];
   }
 
   const allItemIds = new Set();
@@ -137,6 +137,6 @@ async function prepareIngredientTreeData(mainItemId) {
   }
 
   const root = convertComponent(rootNested, rootNested.recipe?.output_item_count || 1, null);
-  return root;
+  return root ? root.children || [] : [];
 }
 
