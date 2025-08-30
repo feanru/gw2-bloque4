@@ -146,8 +146,9 @@ async function staleWhileRevalidate(req, cacheName) {
         statusText: netRes.statusText,
         headers,
       });
+      // Clone the response for caching and return a separate clone to the client
       await cache.put(req, res.clone());
-      return res;
+      return res.clone();
     }
     return netRes;
   };
