@@ -472,6 +472,13 @@ async function createIngredientTree1(itemData, parent = null) {
     }
   }
 
+  // Normalizar Trébol místico para usar parentMultiplier
+  if (ingredient.id === 19675 && itemData.components) {
+    ingredient.parentMultiplier = ingredient.count;
+    ingredient.count = 1;
+    itemData.components = itemData.components.map(c => ({ ...c, count: 1 }));
+  }
+
   // Procesar componentes hijos si existen
   if (itemData.components && Array.isArray(itemData.components)) {
     const results = await Promise.allSettled(
@@ -956,8 +963,15 @@ async function createIngredientTree3(itemData, parent = null) {
         } catch (error) {
           console.warn(`[ERROR] Error al cargar precios para ${ingredient.name} (${ingredient.id}):`, error.message);
           ingredient.setPrices(0, 0);
-        }
       }
+    }
+  }
+
+  // Normalizar Trébol místico para usar parentMultiplier
+  if (ingredient.id === 19675 && itemData.components) {
+    ingredient.parentMultiplier = ingredient.count;
+    ingredient.count = 1;
+    itemData.components = itemData.components.map(c => ({ ...c, count: 1 }));
   }
 
   // Procesar componentes hijos si existen
