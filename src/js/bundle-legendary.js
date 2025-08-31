@@ -313,12 +313,14 @@ class Ingredient {
    * Calcula los totales de forma recursiva para este ingrediente y sus componentes
    * @returns {Object} Objeto con los totales de compra y venta
    */
-  calculateTotals() {
+  calculateTotals(multiplier = 1) {
+    const effective = multiplier * (this.parentMultiplier ?? this.count);
+
     // Si no tiene componentes, devolvemos los precios directos
     if (!this.components || this.components.length === 0) {
       return {
-        buy: this.getTotalBuyPrice(),
-        sell: this.getTotalSellPrice(),
+        buy: this.buyPrice * effective,
+        sell: this.sellPrice * effective,
         isCraftable: false
       };
     }
@@ -329,12 +331,12 @@ class Ingredient {
     let todosTienenPrecio = true;
 
     for (const componente of this.components) {
-      const totalesComponente = componente.calculateTotals();
-      
+      const totalesComponente = componente.calculateTotals(effective);
+
       // Sumar los precios de los componentes, considerando la cantidad
       totalBuy += totalesComponente.buy;
       totalSell += totalesComponente.sell;
-      
+
       // Si algún componente no tiene precio, marcamos como no crafteable
       if (totalesComponente.buy <= 0 && totalesComponente.sell <= 0) {
         todosTienenPrecio = false;
@@ -343,15 +345,14 @@ class Ingredient {
 
     // Si todos los componentes tienen precio, actualizamos este ítem
     if (todosTienenPrecio && totalBuy > 0 && !this._priceLoaded) {
-      const unitCount = this.count || 1;
-      this._buyPrice = totalBuy / unitCount;
-      this._sellPrice = totalSell / unitCount;
+      this._buyPrice = totalBuy / effective;
+      this._sellPrice = totalSell / effective;
       this._priceLoaded = true;
     }
 
     return {
-      buy: this.getTotalBuyPrice(),
-      sell: this.getTotalSellPrice(),
+      buy: this.buyPrice * effective,
+      sell: this.sellPrice * effective,
       isCraftable: todosTienenPrecio
     };
   }
@@ -740,13 +741,15 @@ class Ingredient3 {
    * Calcula los totales de forma recursiva para este ingrediente y sus componentes
    * @returns {Object} Objeto con los totales de compra y venta
    */
-  calculateTotals() {
+  calculateTotals(multiplier = 1) {
+    const effective = multiplier * (this.parentMultiplier ?? this.count);
+
     // Si no tiene componentes, devolvemos los precios directos
     if (!this.components || this.components.length === 0) {
       return {
-        buy: this.getTotalBuyPrice(),
-        sell: this.getTotalSellPrice(),
-        isCraftable: this.isPriceLoaded()
+        buy: this.buyPrice * effective,
+        sell: this.sellPrice * effective,
+        isCraftable: false
       };
     }
 
@@ -756,12 +759,12 @@ class Ingredient3 {
     let todosTienenPrecio = true;
 
     for (const componente of this.components) {
-      const totalesComponente = componente.calculateTotals();
-      
+      const totalesComponente = componente.calculateTotals(effective);
+
       // Sumar los precios de los componentes, considerando la cantidad
       totalBuy += totalesComponente.buy;
       totalSell += totalesComponente.sell;
-      
+
       // Si algún componente no tiene precio, marcamos como no crafteable
       if (totalesComponente.buy <= 0 && totalesComponente.sell <= 0) {
         todosTienenPrecio = false;
@@ -770,15 +773,14 @@ class Ingredient3 {
 
     // Si todos los componentes tienen precio, actualizamos este ítem
     if (todosTienenPrecio && totalBuy > 0 && !this._priceLoaded) {
-      const unitCount = this.count || 1;
-      this._buyPrice = totalBuy / unitCount;
-      this._sellPrice = totalSell / unitCount;
+      this._buyPrice = totalBuy / effective;
+      this._sellPrice = totalSell / effective;
       this._priceLoaded = true;
     }
 
     return {
-      buy: this.getTotalBuyPrice(),
-      sell: this.getTotalSellPrice(),
+      buy: this.buyPrice * effective,
+      sell: this.sellPrice * effective,
       isCraftable: todosTienenPrecio
     };
   }
@@ -3271,7 +3273,9 @@ class LegendaryCraftingBase {
   }
 }
 
-if (typeof window !== 'undefined') { window.LegendaryUtils = { LegendaryCraftingBase }; }
+if (typeof window !== 'undefined') {
+  window.LegendaryUtils = { LegendaryCraftingBase, Ingredient, Ingredient3 };
+}
 
 const quickLoadButtons1 = {
   btnTwilight: { id: 'btnTwilight', itemId: '30704', itemName: 'Crepúsculo' },
