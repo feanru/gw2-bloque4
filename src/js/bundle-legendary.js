@@ -3190,7 +3190,6 @@ class LegendaryCraftingBase {
     const marketBuy = this.currentTree.getTotalBuyPrice();
     const marketSell = this.currentTree.getTotalSellPrice();
     const craftingCost = this.workerTotals ? this.workerTotals.totalBuy : this.calculateComponentsPrice(this.currentTree).buy;
-    const isCraftable = Array.isArray(this.currentTree.components) && this.currentTree.components.length > 0;
 
     let html = `
       <div class="summary-item"><span>Precio venta:</span><span>${marketSell > 0 ? formatGoldColored(marketSell) : 'N/A'}</span></div>
@@ -3198,11 +3197,7 @@ class LegendaryCraftingBase {
     if (craftingCost > 0) {
       html += `<div class="summary-item"><strong>Costo de crafteo total:</strong><strong>${formatGoldColored(craftingCost)}</strong></div>`;
     }
-    if (isCraftable && marketBuy > 0) {
-      const savings = marketBuy - craftingCost;
-      const savingsPercent = Math.round((savings / marketBuy) * 100);
-      html += `<div class="summary-item"><span>Costo de crafteo estimado:</span><span>${formatGoldColored(craftingCost)}</span></div><div class="summary-item summary-total"><span>Ahorro estimado:</span><span style="color: ${savings > 0 ? 'var(--success)' : 'var(--error)'}">${formatGoldColored(savings)} (${savingsPercent}%)</span></div>`;
-    } else if (craftingCost === 0) {
+    if (craftingCost === 0) {
       html += `<div class="summary-item"><span>Información de crafteo:</span><span>No disponible para todos los componentes</span></div>`;
     }
 
