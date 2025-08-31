@@ -473,14 +473,6 @@ async function createIngredientTree1(itemData, parent = null) {
     }
   }
 
-  // Normalizar Trébol místico para usar parentMultiplier
-  if (ingredient.id === 19675 && itemData.components) {
-    const multiplier = ingredient.count;
-    ingredient.parentMultiplier = multiplier;
-    ingredient.count = 1;
-    itemData.components = itemData.components.map(c => ({ ...c, count: c.count / multiplier }));
-  }
-
   // Procesar componentes hijos si existen
   if (itemData.components && Array.isArray(itemData.components)) {
     const results = await Promise.allSettled(
@@ -968,14 +960,6 @@ async function createIngredientTree3(itemData, parent = null) {
           ingredient.setPrices(0, 0);
       }
     }
-  }
-
-  // Normalizar Trébol místico para usar parentMultiplier
-  if (ingredient.id === 19675 && itemData.components) {
-    const multiplier = ingredient.count;
-    ingredient.parentMultiplier = multiplier;
-    ingredient.count = 1;
-    itemData.components = itemData.components.map(c => ({ ...c, count: c.count / multiplier }));
   }
 
   // Procesar componentes hijos si existen
@@ -3099,9 +3083,9 @@ class LegendaryCraftingBase {
           <div class="item-name ${rarityClass}">
             ${isLegendary ? `<a href="/item?id=${ingredient.id}" class="item-link" target="_blank">${ingredient.name || 'Item'}</a>` : (ingredient.name || 'Item')}
           </div>
-          <div class="item-details">
-            ${ingredient.count > 1 ? `<span class="item-count">x${ingredient.count}</span>` : ''}
-            <div class="item-price-container ${priceClass}" title="${priceTooltip}">
+            <div class="item-details">
+              ${ingredient.count > 1 ? `<span class="item-count">x${Math.round(ingredient.count)}</span>` : ''}
+              <div class="item-price-container ${priceClass}" title="${priceTooltip}">
               ${priceContent}
             </div>
           </div>
@@ -3240,6 +3224,21 @@ class LegendaryCraftingBase {
 
   calculateComponentsPrice(ingredient) {
     if (!ingredient.components || ingredient.components.length === 0) return { buy: 0, sell: 0 };
+    if (ingredient.id === 19675) {
+      if (ingredient.count === 77) {
+        const multipliers = [250, 250, 250, 1500];
+        return ingredient.components.reduce((totals, component, index) => ({
+          buy: totals.buy + (component.buyPrice > 0 ? component.buyPrice * multipliers[index] : 0),
+          sell: totals.sell + (component.sellPrice > 0 ? component.sellPrice * multipliers[index] : 0)
+        }), { buy: 0, sell: 0 });
+      }
+      if (ingredient.count === 38) {
+        return ingredient.components.reduce((totals, component) => ({
+          buy: totals.buy + (component.buyPrice > 0 ? component.buyPrice * 38 : 0),
+          sell: totals.sell + (component.sellPrice > 0 ? component.sellPrice * 38 : 0)
+        }), { buy: 0, sell: 0 });
+      }
+    }
     return ingredient.components.reduce((totals, component) => {
       const buyPrice = component.buyPrice > 0 ? component.buyPrice * component.count : 0;
       const sellPrice = component.sellPrice > 0 ? component.sellPrice * component.count : 0;
