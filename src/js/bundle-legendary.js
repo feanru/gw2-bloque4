@@ -474,9 +474,10 @@ async function createIngredientTree1(itemData, parent = null) {
 
   // Normalizar Trébol místico para usar parentMultiplier
   if (ingredient.id === 19675 && itemData.components) {
-    ingredient.parentMultiplier = ingredient.count;
+    const multiplier = ingredient.count;
+    ingredient.parentMultiplier = multiplier;
     ingredient.count = 1;
-    itemData.components = itemData.components.map(c => ({ ...c, count: 1 }));
+    itemData.components = itemData.components.map(c => ({ ...c, count: c.count / multiplier }));
   }
 
   // Procesar componentes hijos si existen
@@ -969,9 +970,10 @@ async function createIngredientTree3(itemData, parent = null) {
 
   // Normalizar Trébol místico para usar parentMultiplier
   if (ingredient.id === 19675 && itemData.components) {
-    ingredient.parentMultiplier = ingredient.count;
+    const multiplier = ingredient.count;
+    ingredient.parentMultiplier = multiplier;
     ingredient.count = 1;
-    itemData.components = itemData.components.map(c => ({ ...c, count: 1 }));
+    itemData.components = itemData.components.map(c => ({ ...c, count: c.count / multiplier }));
   }
 
   // Procesar componentes hijos si existen
