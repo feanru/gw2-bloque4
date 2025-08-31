@@ -69,6 +69,8 @@ export class CraftIngredient {
     const isRoot = parent == null;
     if (isRoot) {
       this.countTotal = this.count * globalQty;
+    } else if (this.parentMultiplier && this.parentMultiplier !== 1) {
+      this.countTotal = parent.countTotal * this.parentMultiplier;
     } else {
       this.countTotal = parent.countTotal * this.count;
     }
