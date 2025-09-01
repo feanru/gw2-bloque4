@@ -42,6 +42,7 @@
 - /dist/js/bundle-auth-nav.CqZGatN4.min.js
 - /dist/js/storageUtils.min.js
 - /dist/js/compareHandlers.min.js
+- /dist/js/search-modal-compare-craft.Ds_WAp9-.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
 ### cuenta.html
