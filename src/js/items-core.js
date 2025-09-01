@@ -79,6 +79,7 @@ export class CraftIngredient {
       if (isMysticCloverSpecial) {
         const manualCounts = this.count === 77 ? [250, 250, 250, 1500] : [38, 38, 38, 38];
         this.children.forEach((child, idx) => {
+          child.count = manualCounts[idx] || 0;
           child.countTotal = manualCounts[idx] || 0;
           child.total_buy = (child.buy_price || 0) * child.countTotal;
           child.total_sell = (child.sell_price || 0) * child.countTotal;

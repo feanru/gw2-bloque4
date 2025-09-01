@@ -53,7 +53,10 @@ const mc77 = new CraftIngredient({
 
 mc77.recalc();
 const expected77 = [250, 250, 250, 1500];
-mc77.children.forEach((c, i) => assert.strictEqual(c.countTotal, expected77[i]));
+mc77.children.forEach((c, i) => {
+  assert.strictEqual(c.count, expected77[i]);
+  assert.strictEqual(c.countTotal, expected77[i]);
+});
 const buy77 = expected77[0] * 2 + expected77[1] * 5 + expected77[2] * 11 + expected77[3] * 17;
 const sell77 = expected77[0] * 3 + expected77[1] * 7 + expected77[2] * 13 + expected77[3] * 19;
 assert.strictEqual(mc77.total_buy, buy77);
@@ -75,7 +78,10 @@ const mc38 = new CraftIngredient({
 
 mc38.recalc();
 const expected38 = [38, 38, 38, 38];
-mc38.children.forEach((c, i) => assert.strictEqual(c.countTotal, expected38[i]));
+mc38.children.forEach((c, i) => {
+  assert.strictEqual(c.count, expected38[i]);
+  assert.strictEqual(c.countTotal, expected38[i]);
+});
 const buy38 = expected38[0] * 2 + expected38[1] * 5 + expected38[2] * 11 + expected38[3] * 17;
 const sell38 = expected38[0] * 3 + expected38[1] * 7 + expected38[2] * 13 + expected38[3] * 19;
 assert.strictEqual(mc38.total_buy, buy38);
