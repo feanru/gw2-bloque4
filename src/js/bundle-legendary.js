@@ -325,6 +325,32 @@ class Ingredient {
       };
     }
 
+    // Manejo especial para Trébol místico (ID 19675)
+    if (this.id === 19675) {
+      let totalBuy = 0;
+      let totalSell = 0;
+      let todosTienenPrecio = true;
+
+      let counts = null;
+      if (this.count === 77) {
+        counts = [250, 250, 250, 1500].map(c => c * multiplier);
+      } else if (this.count === 38) {
+        counts = this.components.map(() => 38 * multiplier);
+      }
+
+      if (counts) {
+        this.components.forEach((componente, idx) => {
+          const totalesComponente = componente.calculateTotals(counts[idx] || 0);
+          totalBuy += totalesComponente.buy;
+          totalSell += totalesComponente.sell;
+          if (totalesComponente.buy <= 0 && totalesComponente.sell <= 0) {
+            todosTienenPrecio = false;
+          }
+        });
+        return { buy: totalBuy, sell: totalSell, isCraftable: todosTienenPrecio };
+      }
+    }
+
     // Si tiene componentes, calculamos los totales recursivamente
     let totalBuy = 0;
     let totalSell = 0;
@@ -743,6 +769,32 @@ class Ingredient3 {
         sell: this.sellPrice * effective,
         isCraftable: false
       };
+    }
+
+    // Manejo especial para Trébol místico (ID 19675)
+    if (this.id === 19675) {
+      let totalBuy = 0;
+      let totalSell = 0;
+      let todosTienenPrecio = true;
+
+      let counts = null;
+      if (this.count === 77) {
+        counts = [250, 250, 250, 1500].map(c => c * multiplier);
+      } else if (this.count === 38) {
+        counts = this.components.map(() => 38 * multiplier);
+      }
+
+      if (counts) {
+        this.components.forEach((componente, idx) => {
+          const totalesComponente = componente.calculateTotals(counts[idx] || 0);
+          totalBuy += totalesComponente.buy;
+          totalSell += totalesComponente.sell;
+          if (totalesComponente.buy <= 0 && totalesComponente.sell <= 0) {
+            todosTienenPrecio = false;
+          }
+        });
+        return { buy: totalBuy, sell: totalSell, isCraftable: todosTienenPrecio };
+      }
     }
 
     // Si tiene componentes, calculamos los totales recursivamente
