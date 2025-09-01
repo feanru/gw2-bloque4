@@ -298,7 +298,7 @@ class Ingredient {
    * @returns {number} Precio total de compra en cobre
    */
   getTotalBuyPrice() {
-    return this.buyPrice * this.count;
+    return this.buyPrice * (this.countTotal ?? this.count);
   }
 
   /**
@@ -306,7 +306,7 @@ class Ingredient {
    * @returns {number} Precio total de venta en cobre
    */
   getTotalSellPrice() {
-    return this.sellPrice * this.count;
+    return this.sellPrice * (this.countTotal ?? this.count);
   }
 
   /**
@@ -314,7 +314,8 @@ class Ingredient {
    * @returns {Object} Objeto con los totales de compra y venta
    */
   calculateTotals(multiplier = 1) {
-    const effective = multiplier * this.count;
+    this.countTotal = multiplier * this.count;
+    const effective = this.countTotal;
 
     // Si no tiene componentes, devolvemos los precios directos
     if (!this.components || this.components.length === 0) {
@@ -344,6 +345,7 @@ class Ingredient {
           componente.count = counts[idx] || 0;
           const totalesComponente = componente.calculateTotals(1);
           componente.count = originalCount;
+          componente.countTotal = counts[idx] || 0;
           totalBuy += totalesComponente.buy;
           totalSell += totalesComponente.sell;
           if (totalesComponente.buy <= 0 && totalesComponente.sell <= 0) {
@@ -545,6 +547,8 @@ function applyWorkerData(src, dest) {
   dest.total_sell = src.total_sell;
   dest.total_crafted = src.total_crafted;
   dest.crafted_price = src.crafted_price;
+  dest.countTotal = src.countTotal;
+  dest.count = src.countTotal;
   if (src.children && dest.components) {
     for (let i = 0; i < src.children.length && i < dest.components.length; i++) {
       applyWorkerData(src.children[i], dest.components[i]);
@@ -2868,7 +2872,7 @@ class LegendaryCraftingBase {
             ${isLegendary ? `<a href="/item?id=${ingredient.id}" class="item-link" target="_blank">${ingredient.name || 'Item'}</a>` : (ingredient.name || 'Item')}
           </div>
             <div class="item-details">
-              ${ingredient.count > 1 ? `<span class="item-count">x${Math.round(ingredient.count)}</span>` : ''}
+              ${(ingredient.countTotal ?? ingredient.count) > 1 ? `<span class="item-count">x${Math.round(ingredient.countTotal ?? ingredient.count)}</span>` : ''}
               <div class="item-price-container ${priceClass}" title="${priceTooltip}">
               ${priceContent}
             </div>
@@ -3011,11 +3015,12 @@ class LegendaryCraftingBase {
       return { buy: 0, sell: 0 };
     }
     return ingredient.components.reduce((totals, component) => {
-      const buyPrice = component.buyPrice > 0 ? component.buyPrice * component.count : 0;
-      const sellPrice = component.sellPrice > 0 ? component.sellPrice * component.count : 0;
+      const count = component.countTotal ?? component.count;
+      const buyPrice = component.buyPrice > 0 ? component.buyPrice * count : 0;
+      const sellPrice = component.sellPrice > 0 ? component.sellPrice * count : 0;
       const compPrices = this.calculateComponentsPrice(component);
-      const scaledBuy = compPrices.buy * component.count;
-      const scaledSell = compPrices.sell * component.count;
+      const scaledBuy = compPrices.buy * count;
+      const scaledSell = compPrices.sell * count;
       return {
         buy: totals.buy + buyPrice + scaledBuy,
         sell: totals.sell + sellPrice + scaledSell
