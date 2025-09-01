@@ -20,8 +20,8 @@ function runTrebolTest(Cls, rootCount, expectedCounts) {
   const sum = expectedCounts.reduce((a, b) => a + b, 0)
   assert.strictEqual(totals.buy, sum)
   assert.strictEqual(totals.sell, sum * 2)
-  root.components.forEach(c => {
-    assert.strictEqual(c.count, rootCount)
+  root.components.forEach((c, i) => {
+    assert.strictEqual(c.countTotal, expectedCounts[i])
   })
 }
 
