@@ -66,17 +66,29 @@ export class CraftIngredient {
 
   recalc(globalQty = 1, parent = null) {
     const isRoot = parent == null;
+    const isMysticCloverSpecial = this.id === 19675 && (this.count === 77 || this.count === 38);
     if (isRoot) {
       this.countTotal = this.count * globalQty;
+    } else if (isMysticCloverSpecial) {
+      this.countTotal = this.count;
     } else {
       this.countTotal = parent.countTotal * this.count;
     }
 
     if (this.children && this.children.length > 0) {
-      this.children.forEach(child => child.recalc(globalQty, this));
+      if (isMysticCloverSpecial) {
+        const manualCounts = this.count === 77 ? [250, 250, 250, 1500] : [38, 38, 38, 38];
+        this.children.forEach((child, idx) => {
+          child.countTotal = manualCounts[idx] || 0;
+          child.total_buy = (child.buy_price || 0) * child.countTotal;
+          child.total_sell = (child.sell_price || 0) * child.countTotal;
+        });
+      } else {
+        this.children.forEach(child => child.recalc(globalQty, this));
+      }
     }
 
-    if (isRoot) {
+    if (isRoot || isMysticCloverSpecial) {
       this.total_buy = this.children.reduce((s, c) => s + (c.total_buy || 0), 0);
       this.total_sell = this.children.reduce((s, c) => s + (c.total_sell || 0), 0);
     } else {
