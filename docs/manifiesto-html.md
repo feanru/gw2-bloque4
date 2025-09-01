@@ -141,6 +141,7 @@
 - https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
 - /dist/js/bundle-utils-1.By0Xs4MH.min.js
+- /dist/js/search-modal.D0pWReq9.min.js
 - /dist/js/bundle-auth-nav.CqZGatN4.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/tabs.DUiiG-cO.min.js
@@ -151,6 +152,7 @@
 - /dist/js/ui-helpers.min.js
 - /dist/js/item-ui.min.js
 - /dist/js/items-core.DMXEDbc5.min.js?v=BsFSl0er
+- /dist/js/services-Bc-4z6yK.js (fallback a /dist/js/services/recipeService.min.js)
 - /dist/js/item-loader.CPhMCrzV.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
