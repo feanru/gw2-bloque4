@@ -25,14 +25,13 @@ export function setIngredientObjs(val) {
 // -------------------------
 
 export class CraftIngredient {
-  constructor({id, name, icon, rarity, count, parentMultiplier = 1, buy_price, sell_price, is_craftable, recipe, children = [], _parentId = null}) {
+  constructor({id, name, icon, rarity, count, buy_price, sell_price, is_craftable, recipe, children = [], _parentId = null}) {
     this._uid = CraftIngredient.nextUid++;
     this.id = id;
     this.name = name;
     this.icon = icon;
     this.rarity = rarity;
     this.count = count;
-    this.parentMultiplier = parentMultiplier || 1;
     this.buy_price = buy_price;
     this.sell_price = sell_price;
     this.is_craftable = is_craftable;
@@ -69,8 +68,6 @@ export class CraftIngredient {
     const isRoot = parent == null;
     if (isRoot) {
       this.countTotal = this.count * globalQty;
-    } else if (this.parentMultiplier && this.parentMultiplier !== 1) {
-      this.countTotal = parent.countTotal * this.parentMultiplier;
     } else {
       this.countTotal = parent.countTotal * this.count;
     }
@@ -353,7 +350,7 @@ export async function prepareIngredientTreeData(mainItemId, mainRecipeData) {
   if (mainRecipeData.nested_recipe) {
     window._mainRecipeOutputCount = mainRecipeData.output_item_count || 1;
     const deserialized = (mainRecipeData.nested_recipe || []).map(obj =>
-      createCraftIngredientFromRecipe(obj, obj.parentMultiplier, null)
+      createCraftIngredientFromRecipe(obj, null)
     );
     restoreCraftIngredientPrototypes(deserialized, null);
     deserialized.forEach(root => root.recalc(window.globalQty, null));
@@ -379,7 +376,7 @@ export async function prepareIngredientTreeData(mainItemId, mainRecipeData) {
           serialized = [];
         }
       }
-      const deserialized = serialized.map(obj => createCraftIngredientFromRecipe(obj, obj.parentMultiplier, null));
+      const deserialized = serialized.map(obj => createCraftIngredientFromRecipe(obj, null));
       restoreCraftIngredientPrototypes(deserialized, null);
       deserialized.forEach(root => root.recalc(window.globalQty, null));
       resolve(deserialized);
@@ -432,7 +429,7 @@ export async function fetchRecipeData(outputItemId) {
   }
 }
 
-export function createCraftIngredientFromRecipe(recipe, parentMultiplier = 1, parentUid = null) {
+export function createCraftIngredientFromRecipe(recipe, parentUid = null) {
   const ingredient = new CraftIngredient({
     id: recipe.id,
     name: recipe.name,
@@ -444,14 +441,12 @@ export function createCraftIngredientFromRecipe(recipe, parentMultiplier = 1, pa
     sell_price: recipe.sell_price || 0,
     is_craftable: recipe.is_craftable || false,
     children: [],
-    parentMultiplier,
     _parentId: parentUid
   });
   if (recipe.children && recipe.children.length > 0) {
     ingredient.children = recipe.children.map(child =>
       createCraftIngredientFromRecipe(
         structuredClone ? structuredClone(child) : JSON.parse(JSON.stringify(child)),
-        child.count * parentMultiplier,
         ingredient._uid
       )
     );

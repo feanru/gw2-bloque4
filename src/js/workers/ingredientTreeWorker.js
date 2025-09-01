@@ -81,7 +81,7 @@ async function prepareIngredientTreeData(mainItemId) {
     }
   }
 
-  function convertComponent(node, parentMultiplier, parentId = null) {
+  function convertComponent(node, parentId = null) {
     const itemDetail = allItemsDetailsMap.get(node.id);
     if (!itemDetail) return null;
     const marketInfo = marketDataMap.get(node.id) || {};
@@ -92,26 +92,25 @@ async function prepareIngredientTreeData(mainItemId) {
       children = node.components
         .map((comp) => {
           if (comp.type === 'Recipe') {
-            return convertComponent(comp, node.output || 1, itemDetail.id);
+            return convertComponent(comp, itemDetail.id);
           } else if (comp.type === 'Item') {
             const detail = allItemsDetailsMap.get(comp.id);
             if (!detail) return null;
             const mInfo = marketDataMap.get(comp.id) || {};
-            return {
-              id: detail.id,
-              name: detail.name,
-              icon: detail.icon,
-              rarity: detail.rarity,
-              count: comp.quantity,
-              parentMultiplier: node.output || 1,
-              buy_price: mInfo.buy_price ?? null,
-              sell_price: mInfo.sell_price ?? null,
-              crafted_price: null,
-              is_craftable: false,
-              recipe: null,
-              children: [],
-              _parentId: itemDetail.id,
-            };
+              return {
+                id: detail.id,
+                name: detail.name,
+                icon: detail.icon,
+                rarity: detail.rarity,
+                count: comp.quantity,
+                buy_price: mInfo.buy_price ?? null,
+                sell_price: mInfo.sell_price ?? null,
+                crafted_price: null,
+                is_craftable: false,
+                recipe: null,
+                children: [],
+                _parentId: itemDetail.id,
+              };
           } else {
             return null;
           }
@@ -125,7 +124,6 @@ async function prepareIngredientTreeData(mainItemId) {
       icon: itemDetail.icon,
       rarity: itemDetail.rarity,
       count: node.quantity,
-      parentMultiplier,
       buy_price: marketInfo.buy_price ?? null,
       sell_price: marketInfo.sell_price ?? null,
       crafted_price: null,
@@ -136,7 +134,7 @@ async function prepareIngredientTreeData(mainItemId) {
     };
   }
 
-  const root = convertComponent(rootNested, rootNested.recipe?.output_item_count || 1, null);
+  const root = convertComponent(rootNested, null);
   return root ? root.children || [] : [];
 }
 
