@@ -73,6 +73,8 @@
 - /dist/js/bundle-legendary.DIH8x-x6.min.js
 - /dist/js/dones.min.js
 - /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/feedback-modal.BaGBwUid.min.js
+- /dist/js/sw-register.Wot8iBZe.min.js
 
 ### end-game.html
 - /img/favicon.ico
