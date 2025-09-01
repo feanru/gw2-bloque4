@@ -127,6 +127,10 @@
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
+- /dist/js/bundle-utils-1.By0Xs4MH.min.js
+- /dist/js/search-modal.D0pWReq9.min.js
+- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/sw-register.Wot8iBZe.min.js
 
 ### item.html
 - /img/favicon.ico
