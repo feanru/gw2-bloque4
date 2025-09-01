@@ -79,3 +79,62 @@ assert.strictEqual(matchMain[1], '0', 'countTotal=0 debe mostrarse en la fila pr
 
 console.log('item-ui renderRows countTotal 0 test passed');
 console.log('item-ui renderMainItemRow countTotal 0 test passed');
+
+// Test for renderIngredient rounding of fractional countTotal
+function createStubElement() {
+  return {
+    innerHTML: '',
+    className: '',
+    appendChild() {},
+    querySelector(sel) {
+      if (sel === '.item-count') {
+        const m = this.innerHTML.match(/<span class="item-count">([^<]*)<\/span>/);
+        return m ? { textContent: m[1] } : null;
+      }
+      return null;
+    }
+  };
+}
+
+global.document.getElementById = () => ({ addEventListener: () => {}, style: {} });
+global.document.createElement = createStubElement;
+global.document.addEventListener = () => {};
+global.document.querySelectorAll = () => [];
+
+global.formatGold = (value) => String(value);
+global.getRarityClass = () => '';
+window.formatGoldColored = global.formatGoldColored;
+window.formatGold = global.formatGold;
+window.getRarityClass = global.getRarityClass;
+
+await import('../src/js/bundle-legendary.js');
+const app = window.appThirdGen;
+
+const container = {
+  appendChild(el) {
+    this.el = el;
+  }
+};
+
+const fractionalIngredient = {
+  id: 99,
+  name: 'Frac',
+  count: 1,
+  countTotal: 1.6,
+  components: [],
+  type: '',
+  icon: '1',
+  buyPrice: 0,
+  sellPrice: 0,
+  total_buy: 0,
+  total_sell: 0,
+  isPriceLoaded: () => false,
+  getTotalBuyPrice: () => 0,
+  getTotalSellPrice: () => 0
+};
+
+await app.renderIngredient(fractionalIngredient, container);
+const span = container.el.querySelector('.item-count');
+assert.ok(span, 'Debe renderizar .item-count para cantidades fraccionadas');
+assert.strictEqual(span.textContent, 'x2', 'Debe redondear y mostrar el entero esperado');
+console.log('bundle-legendary renderIngredient fractional count test passed');
