@@ -483,6 +483,7 @@ async function createIngredientTree1(itemData, parent = null) {
         ingredient.addComponent(r.value);
       }
     });
+    return ingredient;
   }
 
   return ingredient;
@@ -972,6 +973,7 @@ async function createIngredientTree3(itemData, parent = null) {
         ingredient.addComponent(r.value);
       }
     });
+    return ingredient;
   }
 
   return ingredient;
