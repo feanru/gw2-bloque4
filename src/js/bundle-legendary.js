@@ -314,7 +314,7 @@ class Ingredient {
    * @returns {Object} Objeto con los totales de compra y venta
    */
   calculateTotals(multiplier = 1) {
-    const effective = multiplier * (this.parentMultiplier ?? this.count);
+    const effective = multiplier * this.count;
 
     // Si no tiene componentes, devolvemos los precios directos
     if (!this.components || this.components.length === 0) {
@@ -497,7 +497,6 @@ function adaptIngredientForWorker(ing) {
     buy_price: ing.buyPrice > 0 ? ing.buyPrice : null,
     sell_price: ing.sellPrice > 0 ? ing.sellPrice : null,
     is_craftable: Array.isArray(ing.components) && ing.components.length > 0,
-    parentMultiplier: ing.parentMultiplier,
     children: Array.isArray(ing.components) ? ing.components.map(adaptIngredientForWorker) : []
   };
 }
@@ -735,7 +734,7 @@ class Ingredient3 {
    * @returns {Object} Objeto con los totales de compra y venta
    */
   calculateTotals(multiplier = 1) {
-    const effective = multiplier * (this.parentMultiplier ?? this.count);
+    const effective = multiplier * this.count;
 
     // Si no tiene componentes, devolvemos los precios directos
     if (!this.components || this.components.length === 0) {
@@ -3231,9 +3230,8 @@ class LegendaryCraftingBase {
       const sellPrice = component.sellPrice > 0 ? component.sellPrice * component.count : 0;
       if ((buyPrice === 0 || sellPrice === 0) && component.components && component.components.length > 0) {
         const compPrices = this.calculateComponentsPrice(component);
-        const divisor = component.recipe?.output_item_count || component.parentMultiplier || 1;
-        const scaledBuy = (compPrices.buy / divisor) * component.count;
-        const scaledSell = (compPrices.sell / divisor) * component.count;
+        const scaledBuy = compPrices.buy * component.count;
+        const scaledSell = compPrices.sell * component.count;
         return {
           buy: totals.buy + (buyPrice > 0 ? buyPrice : scaledBuy),
           sell: totals.sell + (sellPrice > 0 ? sellPrice : scaledSell)

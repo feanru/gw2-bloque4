@@ -49,7 +49,7 @@ const mixedTree = {
 }
 assert.deepStrictEqual(calc.calculateComponentsPrice(mixedTree), { buy: 13, sell: 18 })
 
-// Component with recipe output count > 1
+  // Component with recipe output count > 1
 const multiOutputTree = {
   components: [
     {
@@ -63,9 +63,9 @@ const multiOutputTree = {
     }
   ]
 }
-assert.deepStrictEqual(calc.calculateComponentsPrice(multiOutputTree), { buy: 6, sell: 12 })
+  assert.deepStrictEqual(calc.calculateComponentsPrice(multiOutputTree), { buy: 18, sell: 36 })
 
-// Component using parentMultiplier fallback
+  // Component with parentMultiplier property (ignored)
 const parentMultiplierTree = {
   components: [
     {
@@ -79,6 +79,6 @@ const parentMultiplierTree = {
     }
   ]
 }
-assert.deepStrictEqual(calc.calculateComponentsPrice(parentMultiplierTree), { buy: 8, sell: 16 })
+  assert.deepStrictEqual(calc.calculateComponentsPrice(parentMultiplierTree), { buy: 32, sell: 64 })
 
 console.log('calculateComponentsPrice test passed')

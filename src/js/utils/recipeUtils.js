@@ -7,7 +7,7 @@
 /**
  * Transforma una receta de la API al formato esperado por CraftIngredient
  */
-window.transformRecipeToIngredient = async function(recipe, count = 1, parentMultiplier = 1) {
+window.transformRecipeToIngredient = async function(recipe, count = 1) {
     try {
         if (!recipe || !recipe.output_item_id) {
             console.error('[ERROR] Receta inválida o sin output_item_id:', recipe);
@@ -33,7 +33,6 @@ window.transformRecipeToIngredient = async function(recipe, count = 1, parentMul
             icon: outputBundle.item.icon || '',
             rarity: outputBundle.item.rarity,
             count: count,
-            parentMultiplier: parentMultiplier,
             buy_price: prices.buy_price || 0,
             sell_price: prices.sell_price || 0,
             is_craftable: recipe.type !== 'GuildConsumable',
@@ -65,7 +64,6 @@ window.transformRecipeToIngredient = async function(recipe, count = 1, parentMul
                     icon: itemDetails.icon || '',
                     rarity: itemDetails.rarity,
                     count: ing.count,
-                    parentMultiplier: recipe.output_item_count,
                     buy_price: prices.buy_price || 0,
                     sell_price: prices.sell_price || 0,
                     is_craftable: !!b.recipe,
@@ -134,7 +132,7 @@ window.loadIngredientTree = async function(ingredient, depth = 0, maxDepth = 3) 
                     const childRecipe = childRecipes[0];
                     if (childRecipe) {
                         // Pasa la receta real y el count correcto
-                        childIngredient = await transformRecipeToIngredient(childRecipe, ing.count, 1);
+                        childIngredient = await transformRecipeToIngredient(childRecipe, ing.count);
                     }
                 }
                 // Si no hay receta, crea un ingrediente básico
@@ -149,7 +147,6 @@ window.loadIngredientTree = async function(ingredient, depth = 0, maxDepth = 3) 
                         icon: itemDetails.icon || '',
                         rarity: itemDetails.rarity,
                         count: ing.count,
-                        parentMultiplier: 1,
                         buy_price: prices.buy_price || 0,
                         sell_price: prices.sell_price || 0,
                         is_craftable: false,
