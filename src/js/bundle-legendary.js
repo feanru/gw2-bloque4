@@ -1,6 +1,7 @@
 // Bundled legendary crafting scripts
 import { getCached, setCached, fetchDedup } from './utils/cache.js';
 import { getPrice, clearCache as clearPriceCache } from './utils/priceHelper.js';
+import { applyWorkerData } from './utils/applyWorkerData.js';
 /**
  * Servicio para interactuar con la API de Guild Wars 2
  */
@@ -542,19 +543,6 @@ function _mapQtyToCount(node) {
 }
 
 // Aplica los datos calculados por el worker al árbol original
-function applyWorkerData(src, dest) {
-  dest.total_buy = src.total_buy;
-  dest.total_sell = src.total_sell;
-  dest.total_crafted = src.total_crafted;
-  dest.crafted_price = src.crafted_price;
-  dest.countTotal = src.countTotal;
-  dest.count = src.countTotal;
-  if (src.children && dest.components) {
-    for (let i = 0; i < src.children.length && i < dest.components.length; i++) {
-      applyWorkerData(src.children[i], dest.components[i]);
-    }
-  }
-}
 
 let _costsWorker = null;
 async function runCostsWorker(tree, globalQty = 1) {
