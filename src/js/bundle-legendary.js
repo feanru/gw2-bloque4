@@ -3224,21 +3224,6 @@ class LegendaryCraftingBase {
 
   calculateComponentsPrice(ingredient) {
     if (!ingredient.components || ingredient.components.length === 0) return { buy: 0, sell: 0 };
-    if (ingredient.id === 19675) {
-      if (ingredient.count === 77) {
-        const multipliers = [250, 250, 250, 1500];
-        return ingredient.components.reduce((totals, component, index) => ({
-          buy: totals.buy + (component.buyPrice > 0 ? component.buyPrice * multipliers[index] : 0),
-          sell: totals.sell + (component.sellPrice > 0 ? component.sellPrice * multipliers[index] : 0)
-        }), { buy: 0, sell: 0 });
-      }
-      if (ingredient.count === 38) {
-        return ingredient.components.reduce((totals, component) => ({
-          buy: totals.buy + (component.buyPrice > 0 ? component.buyPrice * 38 : 0),
-          sell: totals.sell + (component.sellPrice > 0 ? component.sellPrice * 38 : 0)
-        }), { buy: 0, sell: 0 });
-      }
-    }
     return ingredient.components.reduce((totals, component) => {
       const buyPrice = component.buyPrice > 0 ? component.buyPrice * component.count : 0;
       const sellPrice = component.sellPrice > 0 ? component.sellPrice * component.count : 0;
