@@ -12,7 +12,7 @@
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -25,7 +25,7 @@
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -36,13 +36,13 @@
 - /dist/js/bundle-utils-1.By0Xs4MH.min.js
 - /dist/js/tabs.DUiiG-cO.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
-- /dist/js/items-core.DMXEDbc5.min.js?v=BsFSl0er
+- /dist/js/items-core.xSo0rIjF.min.js?v=BsFSl0er
 - /dist/js/ui-helpers.min.js
 - /dist/js/compare-ui.min.js
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/storageUtils.min.js
 - /dist/js/compareHandlers.min.js
-- /dist/js/search-modal-compare-craft.Ds_WAp9-.min.js
+- /dist/js/search-modal.D0pWReq9.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
 ### cuenta.html
@@ -51,7 +51,7 @@
 - css/cuenta.css
 - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/storageUtils.min.js
 - /dist/js/cuenta.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
@@ -60,7 +60,7 @@
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -69,10 +69,9 @@
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
 - /dist/js/bundle-utils-1.By0Xs4MH.min.js
-- /dist/js/bundle-dones.B6LmXL3c.min.js
-- /dist/js/bundle-legendary.DIH8x-x6.min.js
-- /dist/js/dones.min.js
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-dones.BfigOiiB.min.js
+- /dist/js/bundle-legendary.BxYs5ZOp.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -80,7 +79,7 @@
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -88,7 +87,7 @@
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -99,8 +98,8 @@
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
 - /dist/js/bundle-utils-1.By0Xs4MH.min.js
 - /dist/js/tabs.DUiiG-cO.min.js
-- /dist/js/bundle-forja-mistica.B_m8Dj-2.min.js
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-forja-mistica.DYW4Pn2J.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -111,8 +110,8 @@
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
 - /dist/js/bundle-utils-1.By0Xs4MH.min.js
 - /dist/js/tabs.DUiiG-cO.min.js
-- /dist/js/bundle-fractales.C9zaC9ZH.min.js
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-fractales.Dlz215YN.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -122,7 +121,7 @@
 - css/styles-2.css
 - css/index.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -132,7 +131,7 @@
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
 - /dist/js/bundle-utils-1.By0Xs4MH.min.js
 - /dist/js/search-modal.D0pWReq9.min.js
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
 ### item.html
@@ -142,7 +141,7 @@
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
 - /dist/js/bundle-utils-1.By0Xs4MH.min.js
 - /dist/js/search-modal.D0pWReq9.min.js
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/tabs.DUiiG-cO.min.js
 - /dist/js/utils/recipeUtils.min.js
@@ -151,16 +150,16 @@
 - /dist/js/storageUtils.min.js
 - /dist/js/ui-helpers.min.js
 - /dist/js/item-ui.min.js
-- /dist/js/items-core.DMXEDbc5.min.js?v=BsFSl0er
-- /dist/js/services-Bc-4z6yK.js (fallback a /dist/js/services/recipeService.min.js)
-- /dist/js/item-loader.CPhMCrzV.min.js
+- /dist/js/items-core.xSo0rIjF.min.js?v=BsFSl0er
+- /dist/js/services-Cs2ruZo3.js (fallback a /dist/js/services/recipeService.min.js)
+- /dist/js/item-loader.CH7YdHTg.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
 ### janthir-wilds.html
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -171,8 +170,8 @@
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
 - /dist/js/bundle-utils-1.By0Xs4MH.min.js
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
-- /dist/js/bundle-legendary.DIH8x-x6.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
+- /dist/js/bundle-legendary.BxYs5ZOp.min.js
 - /dist/js/tabs.DUiiG-cO.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
@@ -181,21 +180,21 @@
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
 ### login.html
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
 ### lore.html
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -203,7 +202,7 @@
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -211,21 +210,21 @@
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
 ### politica-privacidad.html
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
 ### random.html
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -233,7 +232,7 @@
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -241,7 +240,7 @@
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
@@ -249,7 +248,7 @@
 - /img/favicon.ico
 - css/global-gw.css
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
-- /dist/js/bundle-auth-nav.CqZGatN4.min.js
+- /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
 
