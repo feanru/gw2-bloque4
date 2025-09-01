@@ -7,7 +7,7 @@ global.document = {
 }
 
 await import('../src/js/bundle-legendary.js')
-const { Ingredient, Ingredient3 } = window.LegendaryUtils
+const { Ingredient } = window.LegendaryUtils
 
 function runTrebolTest(Cls, rootCount, expectedCounts) {
   const root = new Cls(19675, 'Trébol', 'account_bound', null, rootCount)
@@ -26,6 +26,6 @@ function runTrebolTest(Cls, rootCount, expectedCounts) {
 }
 
 runTrebolTest(Ingredient, 77, [250, 250, 250, 1500])
-runTrebolTest(Ingredient3, 38, [38, 38, 38, 38])
+runTrebolTest(Ingredient, 38, [38, 38, 38, 38])
 
 console.log('calculateTotals trebol tests passed')

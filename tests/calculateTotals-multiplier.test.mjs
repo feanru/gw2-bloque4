@@ -7,7 +7,7 @@ global.document = {
 }
 
 await import('../src/js/bundle-legendary.js')
-const { Ingredient, Ingredient3 } = window.LegendaryUtils
+const { Ingredient } = window.LegendaryUtils
 
 // Caso 77: aplicar multiplicador externo a hojas
 const leaf77 = () => {
@@ -28,11 +28,11 @@ root77.components.forEach(c => {
 
 // Caso 38: multiplicador diferente
 const leaf38 = () => {
-  const ing = new Ingredient3(1, 'mat', 'mat', null, 1)
+  const ing = new Ingredient(1, 'mat', 'mat', null, 1)
   ing.setPrices(1, 2)
   return ing
 }
-const root38 = new Ingredient3(19675, 'Trébol', 'account_bound', null, 1)
+const root38 = new Ingredient(19675, 'Trébol', 'account_bound', null, 1)
 ;[leaf38(), leaf38(), leaf38(), leaf38()].forEach(c => root38.addComponent(c))
 const totals38 = root38.calculateTotals(38)
 assert.strictEqual(totals38.buy, 4 * 38)
