@@ -340,7 +340,10 @@ class Ingredient {
 
       if (counts) {
         this.components.forEach((componente, idx) => {
-          const totalesComponente = componente.calculateTotals(counts[idx] || 0);
+          const originalCount = componente.count;
+          componente.count = counts[idx] || 0;
+          const totalesComponente = componente.calculateTotals(1);
+          componente.count = originalCount;
           totalBuy += totalesComponente.buy;
           totalSell += totalesComponente.sell;
           if (totalesComponente.buy <= 0 && totalesComponente.sell <= 0) {
@@ -786,7 +789,10 @@ class Ingredient3 {
 
       if (counts) {
         this.components.forEach((componente, idx) => {
-          const totalesComponente = componente.calculateTotals(counts[idx] || 0);
+          const originalCount = componente.count;
+          componente.count = counts[idx] || 0;
+          const totalesComponente = componente.calculateTotals(1);
+          componente.count = originalCount;
           totalBuy += totalesComponente.buy;
           totalSell += totalesComponente.sell;
           if (totalesComponente.buy <= 0 && totalesComponente.sell <= 0) {
