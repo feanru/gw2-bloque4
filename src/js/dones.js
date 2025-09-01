@@ -173,7 +173,7 @@ function renderNodeHtml(node, level = 0) {
   let rowHtml = `<tr>
     <td style='${indent}'>${node.icon ? `<img src='${node.icon}' style='height:28px;'>` : '-'}</td>
     <td>${node.name}</td>
-    <td>${node.count}</td>
+    <td>${Math.round(node.count)}</td>
     <td>${priceBuy}</td>
     <td>${priceSell}</td>
     <td>${totalBuy}</td>
@@ -563,7 +563,7 @@ async function renderTributoDraconico() {
             <tr data-id='${ing.id}' class='${idx % 2 === 0 ? 'row-bg-a' : 'row-bg-b'}'>
               <td><img src='${ing.icon}' style='height:28px;'></td>
               <td>${ing.name}</td>
-              <td>${ing.count}</td>
+              <td>${Math.round(ing.count)}</td>
               <td>${ing.priceBuy ? formatGoldColored(ing.priceBuy) : '-'}</td>
               <td>${ing.priceSell ? formatGoldColored(ing.priceSell) : '-'}</td>
               <td>${totalBuyIng ? formatGoldColored(totalBuyIng) : '-'}</td>
