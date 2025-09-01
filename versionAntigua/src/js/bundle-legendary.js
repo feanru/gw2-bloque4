@@ -3075,7 +3075,7 @@ class LegendaryCraftingBase {
             ${isLegendary ? `<a href="/item?id=${ingredient.id}" class="item-link" target="_blank">${ingredient.name || 'Item'}</a>` : (ingredient.name || 'Item')}
           </div>
           <div class="item-details">
-            ${ingredient.count > 1 ? `<span class="item-count">x${ingredient.count}</span>` : ''}
+            ${ingredient.count > 1 ? `<span class="item-count">x${Math.round(ingredient.count)}</span>` : ''}
             <div class="item-price-container ${priceClass}" title="${priceTooltip}">
               ${priceContent}
             </div>
