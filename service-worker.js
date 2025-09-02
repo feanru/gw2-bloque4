@@ -1,6 +1,6 @@
 // Placeholder replaced during build with the current version hash
 const APP_VERSION = '__APP_VERSION__';
-const CACHE_VERSION = 2;
+const CACHE_VERSION = 3;
 const STATIC_CACHE = `static-${APP_VERSION}-v${CACHE_VERSION}`;
 const API_CACHE = `api-${APP_VERSION}-v${CACHE_VERSION}`;
 const DEFAULT_TTL = 5 * 60 * 1000; // 5 minutes
