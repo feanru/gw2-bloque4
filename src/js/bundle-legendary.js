@@ -535,6 +535,25 @@ function adaptIngredientForWorker(ing) {
   };
 }
 
+// Recorre el árbol sumando los totales de compra de las hojas visibles
+function _sumVisibleBuy(node) {
+  if (!node) return 0;
+  if (Array.isArray(node.components) && node.components.length > 0) {
+    return node.components.reduce((s, c) => s + _sumVisibleBuy(c), 0);
+  }
+  return node.total_buy || 0;
+}
+
+// Recalcula y aplica los totales de compra/venta basados en los precios cargados
+function _applyPriceTotals(node) {
+  if (!node) return;
+  node.total_buy = node.getTotalBuyPrice();
+  node.total_sell = node.getTotalSellPrice();
+  if (Array.isArray(node.components) && node.components.length > 0) {
+    node.components.forEach(_applyPriceTotals);
+  }
+}
+
 // Convierte la propiedad qty en count para el worker
 function _mapQtyToCount(node) {
   node.count = node.qty;
@@ -2655,6 +2674,7 @@ class LegendaryCraftingBase {
     this.isLoading = false;
     this.activeButton = null;
     this.workerTotals = { totalBuy: 0, totalSell: 0, totalCrafted: 0 };
+    this.fallbackTotals = null;
 
     this.calculateComponentsPrice = this.calculateComponentsPrice.bind(this);
     this.initializeEventListeners();
@@ -2733,10 +2753,25 @@ class LegendaryCraftingBase {
       const treeForWorker = [adapted];
       treeForWorker.forEach(_mapQtyToCount);
       const { updatedTree, totals } = await runCostsWorker(treeForWorker, window.globalQty || 1);
+      const workerTotalBuy = totals?.totalBuy || 0;
       if (Array.isArray(updatedTree) && updatedTree[0]) {
         mergeWorkerTotals(updatedTree[0], this.currentTree);
       }
+      const localTotalBuy = _sumVisibleBuy(this.currentTree);
       this.workerTotals = totals || { totalBuy: 0, totalSell: 0, totalCrafted: 0 };
+      const relDiff = workerTotalBuy > 0 ? Math.abs(localTotalBuy - workerTotalBuy) / workerTotalBuy : 0;
+      if (relDiff > 0.005) {
+        console.warn('Discrepancia en totales del worker, usando fallback local', {
+          worker: workerTotalBuy,
+          local: localTotalBuy,
+          relDiff
+        });
+        const fallback = this.currentTree.calculateTotals();
+        _applyPriceTotals(this.currentTree);
+        this.fallbackTotals = { totalBuy: fallback.buy || 0, totalSell: fallback.sell || 0 };
+      } else {
+        this.fallbackTotals = null;
+      }
     } catch (e) {
       console.warn('costsWorker no disponible, usando cálculo local', e);
       const fallback = this.currentTree.calculateTotals();
@@ -2745,6 +2780,8 @@ class LegendaryCraftingBase {
         totalSell: fallback.sell || 0,
         totalCrafted: fallback.buy || 0
       };
+      _applyPriceTotals(this.currentTree);
+      this.fallbackTotals = { totalBuy: fallback.buy || 0, totalSell: fallback.sell || 0 };
     }
   }
 
