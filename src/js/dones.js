@@ -1,5 +1,6 @@
 import { showSkeleton, hideSkeleton } from './ui-helpers.js';
 import { restoreCraftIngredientPrototypes } from './items-core.js';
+import { mergeWorkerTotals } from './utils/mergeWorkerTotals.js';
 const { fetchItemData, fetchPriceData } = window.DonesCore || {};
 // js/dones.js
 
@@ -159,9 +160,12 @@ function runCostsWorker(ingredientTree, globalQty) {
 
 async function buildWorkerTree(ings) {
   const { ingredientTree } = await runDonesWorker(ings);
-  const { updatedTree, totals } = await runCostsWorker(ingredientTree, 1);
-  restoreCraftIngredientPrototypes(updatedTree, null);
-  return { tree: updatedTree, totals };
+  const { costs, totals } = await runCostsWorker(ingredientTree, 1);
+  if (Array.isArray(costs)) {
+    mergeWorkerTotals(costs, ingredientTree);
+  }
+  restoreCraftIngredientPrototypes(ingredientTree, null);
+  return { tree: ingredientTree, totals };
 }
 
 function renderNodeHtml(node, level = 0) {

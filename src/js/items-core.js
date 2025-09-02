@@ -4,6 +4,7 @@
 import { getCached, setCached } from './utils/cache.js';
 import { fetchWithCache } from './utils/requestCache.js';
 import { getPrice, preloadPrices } from './utils/priceHelper.js';
+import { mergeWorkerTotals } from './utils/mergeWorkerTotals.js';
 
 if (typeof window !== 'undefined') {
   window.ingredientObjs = window.ingredientObjs || [];
@@ -182,22 +183,9 @@ export function recalcAll(ingredientObjs, globalQty) {
     const handleMessage = (e) => {
       costsWorker.removeEventListener('message', handleMessage);
       costsWorker.removeEventListener('error', handleError);
-      const { updatedTree, totals } = e.data || {};
-      if (Array.isArray(updatedTree)) {
-        restoreCraftIngredientPrototypes(updatedTree, null);
-      }
-      function apply(src, dest) {
-        Object.assign(dest, src);
-        if (src.children && dest.children) {
-          for (let i = 0; i < src.children.length; i++) {
-            apply(src.children[i], dest.children[i]);
-          }
-        }
-      }
-      if (Array.isArray(updatedTree)) {
-        for (let i = 0; i < updatedTree.length; i++) {
-          apply(updatedTree[i], ingredientObjs[i]);
-        }
+      const { costs, totals } = e.data || {};
+      if (Array.isArray(costs)) {
+        mergeWorkerTotals(costs, ingredientObjs);
       }
       lastTotals = totals || { totalBuy: 0, totalSell: 0, totalCrafted: 0 };
       resolve();
