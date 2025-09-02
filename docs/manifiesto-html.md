@@ -70,7 +70,7 @@
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
 - /dist/js/bundle-utils-1.By0Xs4MH.min.js
 - /dist/js/bundle-dones.BfigOiiB.min.js
-- /dist/js/bundle-legendary.BxYs5ZOp.min.js
+- /dist/js/bundle-legendary.C_iKbyT-.min.js
 - /dist/js/bundle-auth-nav.BVkn9sMV.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
@@ -171,7 +171,7 @@
 - https://www.googletagmanager.com/gtag/js?id=G-1YJ4M39JP3
 - /dist/js/bundle-utils-1.By0Xs4MH.min.js
 - /dist/js/bundle-auth-nav.BVkn9sMV.min.js
-- /dist/js/bundle-legendary.BxYs5ZOp.min.js
+- /dist/js/bundle-legendary.C_iKbyT-.min.js
 - /dist/js/tabs.DUiiG-cO.min.js
 - /dist/js/feedback-modal.BaGBwUid.min.js
 - /dist/js/sw-register.Wot8iBZe.min.js
