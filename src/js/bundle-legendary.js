@@ -2,6 +2,8 @@
 import { getCached, setCached, fetchDedup } from './utils/cache.js';
 import { getPrice, clearCache as clearPriceCache } from './utils/priceHelper.js';
 import { mergeWorkerTotals } from './utils/mergeWorkerTotals.js';
+// Ensure there's always a global quantity value
+window.globalQty = window.globalQty || 1;
 /**
  * Servicio para interactuar con la API de Guild Wars 2
  */
@@ -2704,6 +2706,24 @@ class LegendaryCraftingBase {
       const btn = document.getElementById(id);
       if (btn) btn.addEventListener('click', () => this._handleQuickLoad(id));
     });
+
+    // Update global quantity from UI changes
+    const qtyInput = document.getElementById('qty-global');
+    if (qtyInput) {
+      qtyInput.addEventListener('change', async (e) => {
+        let val = parseInt(e.target.value, 10);
+        if (isNaN(val) || val < 1) {
+          val = 1;
+          e.target.value = '1';
+        }
+        window.globalQty = val;
+        if (this.currentTree) {
+          await this.updateTotals();
+          await this.renderTree();
+          this.renderSummary();
+        }
+      });
+    }
   }
 
   async updateTotals() {
@@ -2712,7 +2732,7 @@ class LegendaryCraftingBase {
       const adapted = adaptIngredientForWorker(this.currentTree);
       const treeForWorker = [adapted];
       treeForWorker.forEach(_mapQtyToCount);
-      const { updatedTree, totals } = await runCostsWorker(treeForWorker, 1);
+      const { updatedTree, totals } = await runCostsWorker(treeForWorker, window.globalQty || 1);
       if (Array.isArray(updatedTree) && updatedTree[0]) {
         mergeWorkerTotals(updatedTree[0], this.currentTree);
       }
