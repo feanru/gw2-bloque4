@@ -55,7 +55,23 @@ ctx.onmessage = (e) => {
   const ingredientObjs = rebuildTreeArray(ingredientTree);
   recalcAll(ingredientObjs, globalQty);
   const totals = getTotals(ingredientObjs);
-  ctx.postMessage({ updatedTree: ingredientObjs, totals });
+  const costs = [];
+  (function collect(nodes) {
+    for (const n of nodes) {
+      costs.push({
+        uid: n._uid,
+        total_buy: n.total_buy,
+        total_sell: n.total_sell,
+        total_crafted: n.total_crafted,
+        crafted_price: n.crafted_price,
+        countTotal: n.countTotal
+      });
+      if (Array.isArray(n.children) && n.children.length) {
+        collect(n.children);
+      }
+    }
+  })(ingredientObjs);
+  ctx.postMessage({ costs, totals });
 };
 
 export { rebuildTreeArray, recalcAll, getTotals };

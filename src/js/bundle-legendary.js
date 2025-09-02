@@ -2752,10 +2752,10 @@ class LegendaryCraftingBase {
       const adapted = adaptIngredientForWorker(this.currentTree);
       const treeForWorker = [adapted];
       treeForWorker.forEach(_mapQtyToCount);
-      const { updatedTree, totals } = await runCostsWorker(treeForWorker, window.globalQty || 1);
+      const { costs, totals } = await runCostsWorker(treeForWorker, window.globalQty || 1);
       const workerTotalBuy = totals?.totalBuy || 0;
-      if (Array.isArray(updatedTree) && updatedTree[0]) {
-        mergeWorkerTotals(updatedTree[0], this.currentTree);
+      if (Array.isArray(costs)) {
+        mergeWorkerTotals(costs, this.currentTree);
       }
       const localTotalBuy = _sumVisibleBuy(this.currentTree);
       this.workerTotals = totals || { totalBuy: 0, totalSell: 0, totalCrafted: 0 };
