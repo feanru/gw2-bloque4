@@ -1,7 +1,7 @@
 // Bundled legendary crafting scripts
 import { getCached, setCached, fetchDedup } from './utils/cache.js';
 import { getPrice, clearCache as clearPriceCache } from './utils/priceHelper.js';
-import { applyWorkerData } from './utils/applyWorkerData.js';
+import { mergeWorkerTotals } from './utils/mergeWorkerTotals.js';
 /**
  * Servicio para interactuar con la API de Guild Wars 2
  */
@@ -2714,7 +2714,7 @@ class LegendaryCraftingBase {
       treeForWorker.forEach(_mapQtyToCount);
       const { updatedTree, totals } = await runCostsWorker(treeForWorker, 1);
       if (Array.isArray(updatedTree) && updatedTree[0]) {
-        applyWorkerData(updatedTree[0], this.currentTree);
+        mergeWorkerTotals(updatedTree[0], this.currentTree);
       }
       this.workerTotals = totals || { totalBuy: 0, totalSell: 0, totalCrafted: 0 };
     } catch (e) {
