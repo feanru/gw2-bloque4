@@ -47,13 +47,16 @@ export default {
       chunkInfo.facadeModuleId.includes('/workers/')
         ? '[name].[hash].js'
         : '[name].[hash].min.js',
-    chunkFileNames: '[name]-[hash].js',
+    chunkFileNames: (chunkInfo) =>
+      chunkInfo.name === 'services-Bc-4z6yK'
+        ? '[name].js'
+        : '[name]-[hash].js',
     manualChunks(id) {
       if (id.includes('src/js/utils')) {
         return 'utils';
       }
       if (id.includes('src/js/services/recipeService.js')) {
-        return 'services';
+        return 'services-Bc-4z6yK';
       }
     }
   }
