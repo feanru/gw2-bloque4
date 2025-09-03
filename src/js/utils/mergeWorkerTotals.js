@@ -15,18 +15,17 @@ export function mergeWorkerTotals(costs, dest) {
     children.forEach(buildMap);
   })(Array.isArray(dest) ? { children: dest } : dest);
 
-  const fields = [
+  const costFields = [
     'total_buy',
     'total_sell',
     'total_crafted',
-    'crafted_price',
-    'countTotal'
+    'crafted_price'
   ];
 
   costs.forEach(node => {
     const target = uidMap.get(String(node.uid));
     if (target) {
-      fields.forEach(key => {
+      costFields.forEach(key => {
         if (Object.prototype.hasOwnProperty.call(node, key)) {
           target[key] = node[key];
         }
