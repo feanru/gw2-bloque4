@@ -2,6 +2,7 @@
 import { getCached, setCached, fetchDedup } from './utils/cache.js';
 import { getPrice, clearCache as clearPriceCache } from './utils/priceHelper.js';
 import { mergeWorkerTotals } from './utils/mergeWorkerTotals.js';
+import { setGlobalQty } from './items-core.js';
 // Ensure there's always a global quantity value
 window.globalQty = window.globalQty || 1;
 /**
@@ -566,7 +567,7 @@ function _mapQtyToCount(node) {
 // Aplica los datos calculados por el worker al árbol original
 
 let _costsWorker = null;
-async function runCostsWorker(tree, globalQty = 1) {
+async function runCostsWorker(tree, globalQty = window.globalQty || 1) {
   if (typeof Worker === 'undefined') throw new Error('Web Workers no soportados');
   if (!_costsWorker) {
     _costsWorker = new Worker(new URL('./workers/costsWorker.js', import.meta.url), { type: 'module' });
@@ -2736,7 +2737,7 @@ class LegendaryCraftingBase {
           val = 1;
           e.target.value = '1';
         }
-        window.globalQty = val;
+        setGlobalQty(val);
         if (this.currentTree) {
           await this.updateTotals();
           await this.renderTree();

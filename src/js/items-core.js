@@ -174,7 +174,7 @@ export function restoreExpandState(ings, snapshot) {
 let costsWorker = null;
 let lastTotals = { totalBuy: 0, totalSell: 0, totalCrafted: 0 };
 
-export function recalcAll(ingredientObjs, globalQty) {
+export function recalcAll(ingredientObjs, globalQty = window.globalQty || 1) {
   if (!ingredientObjs) return Promise.resolve();
   if (!costsWorker) {
     costsWorker = new Worker(new URL('./workers/costsWorker.js', import.meta.url), { type: 'module' });

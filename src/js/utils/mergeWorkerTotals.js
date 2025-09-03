@@ -19,7 +19,8 @@ export function mergeWorkerTotals(costs, dest) {
     'total_buy',
     'total_sell',
     'total_crafted',
-    'crafted_price'
+    'crafted_price',
+    'countTotal'
   ];
 
   costs.forEach(node => {
