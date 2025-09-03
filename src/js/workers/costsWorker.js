@@ -58,14 +58,15 @@ ctx.onmessage = (e) => {
   const costs = [];
   (function collect(nodes) {
     for (const n of nodes) {
-      costs.push({
-        uid: n._uid,
-        total_buy: n.total_buy,
-        total_sell: n.total_sell,
-        total_crafted: n.total_crafted,
-        crafted_price: n.crafted_price,
-        countTotal: n.countTotal
-      });
+      const {
+        _uid: uid,
+        total_buy,
+        total_sell,
+        total_crafted,
+        crafted_price,
+        countTotal
+      } = n;
+      costs.push({ uid, total_buy, total_sell, total_crafted, crafted_price, countTotal });
       if (Array.isArray(n.children) && n.children.length) {
         collect(n.children);
       }
