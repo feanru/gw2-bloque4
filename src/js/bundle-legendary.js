@@ -536,15 +536,6 @@ function adaptIngredientForWorker(ing) {
   };
 }
 
-// Recorre el árbol sumando los totales de compra de las hojas visibles
-function _sumVisibleBuy(node) {
-  if (!node) return 0;
-  if (Array.isArray(node.components) && node.components.length > 0) {
-    return node.components.reduce((s, c) => s + _sumVisibleBuy(c), 0);
-  }
-  return node.total_buy || 0;
-}
-
 // Recalcula y aplica los totales de compra/venta basados en los precios cargados
 function _applyPriceTotals(node) {
   if (!node) return;
@@ -2676,6 +2667,7 @@ class LegendaryCraftingBase {
     this.activeButton = null;
     this.workerTotals = { totalBuy: 0, totalSell: 0, totalCrafted: 0 };
     this.fallbackTotals = null;
+    this.localTotals = { totalBuy: 0, totalSell: 0 };
 
     this.calculateComponentsPrice = this.calculateComponentsPrice.bind(this);
     this.initializeEventListeners();
@@ -2758,19 +2750,27 @@ class LegendaryCraftingBase {
       if (Array.isArray(costs)) {
         mergeWorkerTotals(costs, this.currentTree);
       }
-      const localTotalBuy = _sumVisibleBuy(this.currentTree);
-      this.workerTotals = totals || { totalBuy: 0, totalSell: 0, totalCrafted: 0 };
+      const localCalc = this.currentTree.calculateTotals();
+      const localTotalBuy = localCalc.buy || 0;
+      const localTotalSell = localCalc.sell || 0;
+      this.localTotals = { totalBuy: localTotalBuy, totalSell: localTotalSell };
       const relDiff = workerTotalBuy > 0 ? Math.abs(localTotalBuy - workerTotalBuy) / workerTotalBuy : 0;
       if (relDiff > 0.005) {
-        console.warn('Discrepancia en totales del worker, usando fallback local', {
+        console.warn('Discrepancia en totales del worker, usando cálculo local', {
           worker: workerTotalBuy,
           local: localTotalBuy,
           relDiff
         });
         const fallback = this.currentTree.calculateTotals();
         _applyPriceTotals(this.currentTree);
+        this.workerTotals = {
+          totalBuy: fallback.buy || 0,
+          totalSell: fallback.sell || 0,
+          totalCrafted: fallback.buy || 0
+        };
         this.fallbackTotals = { totalBuy: fallback.buy || 0, totalSell: fallback.sell || 0 };
       } else {
+        this.workerTotals = totals || { totalBuy: 0, totalSell: 0, totalCrafted: 0 };
         this.fallbackTotals = null;
       }
     } catch (e) {
@@ -2783,6 +2783,7 @@ class LegendaryCraftingBase {
       };
       _applyPriceTotals(this.currentTree);
       this.fallbackTotals = { totalBuy: fallback.buy || 0, totalSell: fallback.sell || 0 };
+      this.localTotals = { totalBuy: fallback.buy || 0, totalSell: fallback.sell || 0 };
     }
   }
 
