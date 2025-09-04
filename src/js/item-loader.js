@@ -30,6 +30,18 @@ async function ensureDeps() {
         cancelItemRequests,
         recalcAll
       } = core);
+      // Validamos que todos los métodos requeridos estén presentes. Si alguno
+      // falta, la build de items-core es incorrecta y el loader no funcionará.
+      if (
+        !prepareIngredientTreeData ||
+        !CraftIngredient ||
+        !setIngredientObjs ||
+        !findIngredientsById ||
+        !cancelItemRequests ||
+        !recalcAll
+      ) {
+        throw new Error('items-core exports missing');
+      }
       ({ preloadPrices } = price);
       ({ getItemBundles } = recipe);
       ({ update: updateState } = state);
