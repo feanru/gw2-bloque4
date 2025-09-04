@@ -61,7 +61,9 @@ export async function loadItem(itemId) {
     itemDetailsController.abort();
     itemDetailsController = null;
   }
-  cancelItemRequests();
+  if (typeof cancelItemRequests === 'function') {
+    cancelItemRequests();
+  }
 
   if (!itemId) {
     window.hideSkeleton?.(document.getElementById('item-skeleton'));
