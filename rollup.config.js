@@ -1,6 +1,21 @@
 import terser from '@rollup/plugin-terser';
 import { writeFileSync } from 'node:fs';
 
+// Algunos módulos, como items-core, necesitan conservar ciertos nombres de
+// exportaciones para que puedan ser importados dinámicamente desde otros
+// bundles.  En builds anteriores, el minificador y el tree shaking eliminaban
+// o renombraban estas funciones, rompiendo las importaciones de item-loader.
+// Listamos los nombres que deben preservarse y desactivamos el tree‑shaking
+// global para evitar que se descarten.
+const RESERVED_EXPORTS = [
+  'prepareIngredientTreeData',
+  'setIngredientObjs',
+  'findIngredientsById',
+  'cancelItemRequests',
+  'recalcAll',
+  'CraftIngredient'
+];
+
 export default {
   // Entradas separadas para cada vista o funcionalidad pesada
   input: {
@@ -23,8 +38,16 @@ export default {
       'costsWorker': 'src/js/workers/costsWorker.js'
     },
   external: ['./tabs.min.js', './services/recipeService.min.js'],
+  // Desactivamos tree shaking para preservar todas las exportaciones de los
+  // módulos de entrada, en especial items-core, cuyas funciones se consumen
+  // dinámicamente desde otros bundles.
+  treeshake: false,
   plugins: [
-    terser(),
+    terser({
+      mangle: {
+        reserved: RESERVED_EXPORTS
+      }
+    }),
     {
       name: 'manifest',
       generateBundle(options, bundle) {
