@@ -57,7 +57,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  if (url.pathname.startsWith('/dist/js/') || url.pathname.startsWith('/css/')) {
+  if (
+    url.pathname.startsWith('/static/current/js/') ||
+    url.pathname.startsWith('/static/current/css/') ||
+    url.pathname.startsWith('/static/current/workers/')
+  ) {
     event.respondWith(cacheFirst(request, STATIC_CACHE));
     return;
   }
