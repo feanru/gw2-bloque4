@@ -19,10 +19,19 @@
 
    ```bash
    curl -I -H 'Cache-Control: max-age=0' https://<dominio>/static/current/app.js
-   curl -I -H 'Cache-Control: max-age=0' https://<dominio>/static/123/app.js
-   ```
+    curl -I -H 'Cache-Control: max-age=0' https://<dominio>/static/123/app.js
+    ```
 
-   Ambas respuestas deben incluir las cabeceras mencionadas.
+    Ambas respuestas deben incluir las cabeceras mencionadas.
+
+4. Con la caché antigua aún activa, cargar la aplicación en un navegador y
+   comprobar que el *Service Worker* actualiza los recursos:
+
+   - En la consola, ejecutar `caches.keys()` y verificar que sólo existen
+     `static-${APP_VERSION}-v${CACHE_VERSION}` y
+     `api-${APP_VERSION}-v${CACHE_VERSION}`.
+   - Revisar la pestaña *Network* y confirmar que todos los assets provienen de
+     la nueva versión desplegada.
 
 ## Rollback
 
