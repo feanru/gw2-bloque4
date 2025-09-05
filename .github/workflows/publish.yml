@@ -17,4 +17,9 @@ jobs:
       - run: rm -rf dist/js dist/manifest.json
       - run: npm run build
       - run: npm run check-assets
+      - run: npm run check-workers
+      - uses: actions/upload-artifact@v4
+        with:
+          name: workers-report
+          path: workers-report.json
       - run: npm run purge:cdn
