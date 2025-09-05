@@ -15,9 +15,10 @@ const PRECACHE_ASSETS = __PRECACHE_ASSETS__;
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
-    caches
-      .open(STATIC_CACHE)
-      .then((cache) => cache.addAll([...VIDEO_ASSETS, ...PRECACHE_ASSETS]))
+    caches.open(STATIC_CACHE).then(async (cache) => {
+      await cache.addAll(VIDEO_ASSETS);
+      await cache.addAll(PRECACHE_ASSETS);
+    })
   );
 });
 
