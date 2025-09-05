@@ -17,14 +17,15 @@ find "$RELEASE_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 rm -rf dist "$BUILD_DIR"
 mkdir -p dist
 
-# Build packages and service worker
+# Build packages and bundles
 npm run build:packages
-sed "s/__APP_VERSION__/$APP_VERSION/" service-worker.js > service-worker.build.js
+rollup -c
+
+# Generate precache assets and build service worker
+PRECACHE_ASSETS=$(node scripts/generate-precache.js)
+sed -e "s/__APP_VERSION__/$APP_VERSION/" -e "s|__PRECACHE_ASSETS__|$PRECACHE_ASSETS|" service-worker.js > service-worker.build.js
 npx terser service-worker.build.js -o service-worker.min.js
 rm service-worker.build.js
-
-# Run rollup
-rollup -c
 
 # Insert shared assets
 node scripts/include-assets.js

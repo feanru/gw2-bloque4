@@ -10,11 +10,14 @@ const VIDEO_ASSETS = [
   'img/Secuencia02.mp4',
   'img/Secuencia03.mp4',
 ];
+const PRECACHE_ASSETS = __PRECACHE_ASSETS__;
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => cache.addAll(VIDEO_ASSETS))
+    caches
+      .open(STATIC_CACHE)
+      .then((cache) => cache.addAll([...VIDEO_ASSETS, ...PRECACHE_ASSETS]))
   );
 });
 
