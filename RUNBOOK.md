@@ -27,3 +27,12 @@
 ## Rollback
 
 Ejecutar `bash scripts/rollback.sh <VERSION>` para que el alias `current` vuelva a apuntar a la versión deseada.
+
+## Monitorización de rutas obsoletas
+
+- El archivo `/var/log/nginx/legacy.log` registra accesos a rutas antiguas como `/dist/`.
+- El archivo `/var/log/nginx/404.log` captura todas las respuestas 404.
+- Revisar ambos logs de forma mensual.
+- Si una ruta antigua recibe menos de 5 accesos por semana durante cuatro semanas consecutivas, programar la eliminación de su rewrite o redirección.
+- Las rewrites o redirecciones temporales deben eliminarse, como máximo, antes del **30/06/2025**.
+- Documentar el plan de retiro en este runbook o en un issue del repositorio cuando los accesos sean insignificantes.
