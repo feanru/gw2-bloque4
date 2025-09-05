@@ -71,7 +71,7 @@ function getRarityClass(rarity) {
 
 // openSearchModal and closeSearchModal from js/modal-utils.js
 (function() {
-  window.openSearchModal = async function(scriptUrl = '/dist/js/search-modal.min.js') {
+  window.openSearchModal = async function(scriptUrl = '/static/current/js/search-modal.min.js') {
     const modal = document.getElementById('search-modal');
     if (!modal) return;
     modal.style.display = 'block';

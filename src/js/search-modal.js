@@ -17,7 +17,7 @@
   if (typeof initSearchModal === 'undefined') {
     var script = document.createElement('script');
     script.type = 'module';
-    script.src = '/dist/js/search-modal-core.min.js';
+    script.src = '/static/current/js/search-modal-core.min.js';
     script.onload = start;
     document.body.appendChild(script);
   } else {
