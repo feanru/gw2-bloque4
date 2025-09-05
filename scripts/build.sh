@@ -26,6 +26,9 @@ rm service-worker.build.js
 # Run rollup
 rollup -c
 
+# Insert shared assets
+node scripts/include-assets.js
+
 # Post build tasks
 node scripts/update-html.js
 npm run purge:cdn || true
@@ -36,3 +39,4 @@ mv "$BUILD_DIR" "$TARGET_DIR"
 
 # Restore html templates to non-hashed script references
 node scripts/update-templates.js
+node scripts/include-assets.js restore
