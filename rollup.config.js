@@ -1,5 +1,6 @@
 import terser from '@rollup/plugin-terser';
 import { writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 
 // Algunos módulos, como items-core, necesitan conservar ciertos nombres de
 // exportaciones para que puedan ser importados dinámicamente desde otros
@@ -52,11 +53,13 @@ export default {
       name: 'manifest',
       generateBundle(options, bundle) {
         const manifest = {};
-        for (const [fileName, chunk] of Object.entries(bundle)) {
+        for (const chunk of Object.values(bundle)) {
           if (chunk.type === 'chunk' && chunk.isEntry) {
-            const isWorker = chunk.facadeModuleId?.includes('/workers/') ?? false;
-            const originalName = `/dist/js/${chunk.name}${isWorker ? '.js' : '.min.js'}`;
-            manifest[originalName] = `/dist/js/${fileName}`;
+            const hash = createHash('sha256')
+              .update(chunk.code)
+              .digest('base64url')
+              .slice(0, 8);
+            manifest[`/static/js/${chunk.name}.min.js`] = hash;
           }
         }
         writeFileSync('dist/manifest.json', JSON.stringify(manifest, null, 2));
@@ -66,10 +69,7 @@ export default {
   output: {
     dir: 'dist/js',
     format: 'es',
-    entryFileNames: (chunkInfo) =>
-      chunkInfo.facadeModuleId.includes('/workers/')
-        ? '[name].[hash].js'
-        : '[name].[hash].min.js',
+    entryFileNames: '[name].min.js',
     chunkFileNames: (chunkInfo) =>
       chunkInfo.name === 'services-Bc-4z6yK'
         ? '[name].js'
