@@ -37,6 +37,5 @@ npm run purge:cdn || true
 mv dist "$BUILD_DIR"
 mv "$BUILD_DIR" "$TARGET_DIR"
 
-# Restore html templates to non-hashed script references
-node scripts/update-templates.js
+# Restore html templates
 node scripts/include-assets.js restore
