@@ -41,7 +41,6 @@ Ejecutar `bash scripts/rollback.sh <VERSION>` para que el alias `current` vuelva
 
 - El archivo `/var/log/nginx/legacy.log` registra accesos a rutas antiguas como `/dist/`.
 - El archivo `/var/log/nginx/404.log` captura todas las respuestas 404.
-- Revisar ambos logs de forma mensual.
-- Si una ruta antigua recibe menos de 5 accesos por semana durante cuatro semanas consecutivas, programar la eliminación de su rewrite o redirección.
-- Las rewrites o redirecciones temporales deben eliminarse, como máximo, antes del **30/06/2025**.
+- Una tarea programada (`scripts/legacy-cleanup.cron`) ejecuta mensualmente `scripts/legacy-cleanup.sh` para revisar estos logs y eliminar rewrites que cumplan el criterio de retiro.
+- El criterio de retiro: menos de 5 accesos por semana durante cuatro semanas consecutivas o fecha tope **30/06/2025**.
 - Documentar el plan de retiro en este runbook o en un issue del repositorio cuando los accesos sean insignificantes.

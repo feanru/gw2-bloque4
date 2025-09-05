@@ -1,0 +1,2 @@
+# Run monthly legacy rewrite cleanup
+0 2 1 * * root /usr/bin/env bash /var/www/gw2/current/scripts/legacy-cleanup.sh
