@@ -7,7 +7,8 @@ RELEASE=${1:-$(git rev-parse --short HEAD)}
 KEEP=${KEEP:-3}
 
 mkdir -p "$TARGET/static/releases/$RELEASE"
-cp -a dist css img service-worker.min.js *.html "$TARGET/static/releases/$RELEASE/"
+cp -r dist css img backend "$TARGET/static/releases/$RELEASE/"
+cp .htaccess refresh.php service-worker.min.js version.txt *.html "$TARGET/static/releases/$RELEASE/"
 ln -sfn "$TARGET/static/releases/$RELEASE" "$TARGET/static/current"
 
 cd "$TARGET/static/releases"
