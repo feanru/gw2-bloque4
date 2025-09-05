@@ -10,7 +10,7 @@ const VIDEO_ASSETS = [
   'img/Secuencia02.mp4',
   'img/Secuencia03.mp4',
 ];
-const PRECACHE_ASSETS = __PRECACHE_ASSETS__;
+const PRECACHE_ASSETS = [...__PRECACHE_ASSETS__, '/offline.html'];
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -55,6 +55,21 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
+
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      (async () => {
+        try {
+          return await fetch(request);
+        } catch {
+          const cache = await caches.open(STATIC_CACHE);
+          const cached = await cache.match(request);
+          return cached || cache.match('/offline.html');
+        }
+      })()
+    );
+    return;
+  }
 
   if (VIDEO_ASSETS.some((asset) => url.pathname === '/' + asset)) {
     event.respondWith(cacheFirst(request, STATIC_CACHE));
