@@ -163,7 +163,8 @@ if (function_exists('opcache_reset')) {
 }
 
 // ---------- Actualizar versión de assets ----------
-$versionValue = (string)time();
+$gitHash = trim(@shell_exec('git rev-parse --short HEAD'));
+$versionValue = $gitHash !== '' ? 'v' . $gitHash : ('v' . time());
 if (@file_put_contents($VERSION_FILE, $versionValue, LOCK_EX) === false) {
     $errors[] = 'No se pudo escribir version.txt';
 }

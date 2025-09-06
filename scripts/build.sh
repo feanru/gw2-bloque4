@@ -3,8 +3,12 @@ set -e
 
 BUILD_DIR="dist-tmp"
 RELEASE_DIR="releases"
+# Version string shared between build artifacts and runtime cache busting
 APP_VERSION="v$(git rev-parse --short HEAD)"
 TARGET_DIR="$RELEASE_DIR/$APP_VERSION"
+
+# Ensure version.txt matches APP_VERSION exactly
+echo -n "$APP_VERSION" > version.txt
 
 cleanup() {
   rm -rf dist "$BUILD_DIR"
