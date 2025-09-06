@@ -25,6 +25,44 @@ mkdir -p dist
 npm run build:packages
 rollup -c
 
+# Rename bundles with their content hash and drop stale minified files
+node <<'NODE'
+const fs = require('fs');
+const path = require('path');
+const manifestPath = path.join('dist', 'manifest.json');
+const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+const jsDir = path.join('dist', 'js');
+const updated = {};
+
+for (const [original, hash] of Object.entries(manifest)) {
+  const base = path.basename(original);
+  const hashedName = base.endsWith('.min.js')
+    ? base.replace(/\.min\.js$/, `.${hash}.min.js`)
+    : base.replace(/\.js$/, `.${hash}.js`);
+  const src = path.join(jsDir, base);
+  const dest = path.join(jsDir, hashedName);
+  if (fs.existsSync(src)) {
+    fs.renameSync(src, dest);
+  }
+  updated[original] = `/static/js/${hashedName}`;
+}
+
+fs.writeFileSync(manifestPath, JSON.stringify(updated, null, 2));
+
+const allowed = new Set(Object.values(updated).map(p => path.basename(p)));
+for (const file of fs.readdirSync(jsDir)) {
+  if (file.endsWith('.min.js') && !allowed.has(file)) {
+    fs.unlinkSync(path.join(jsDir, file));
+  }
+}
+
+const leftover = fs.readdirSync(jsDir).filter(f => f.endsWith('.min.js') && !allowed.has(f));
+if (leftover.length) {
+  console.error('Unexpected unhashed bundles:', leftover.join(', '));
+  process.exit(1);
+}
+NODE
+
 # Generate precache assets and build service worker
 PRECACHE_ASSETS=$(node scripts/generate-precache.js)
 sed -e "s/__APP_VERSION__/$APP_VERSION/" -e "s|__PRECACHE_ASSETS__|$PRECACHE_ASSETS|" service-worker.js > service-worker.build.js
