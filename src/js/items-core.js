@@ -177,7 +177,7 @@ let lastTotals = { totalBuy: 0, totalSell: 0, totalCrafted: 0 };
 export function recalcAll(ingredientObjs, globalQty = window.globalQty || 1) {
   if (!ingredientObjs) return Promise.resolve();
   if (!costsWorker) {
-    costsWorker = new Worker(new URL('./workers/costsWorker.js', import.meta.url), { type: 'module' });
+    costsWorker = new Worker(new URL('./workers/costsWorker.min.js', import.meta.url), { type: 'module' });
   }
   return new Promise((resolve, reject) => {
     const handleMessage = (e) => {
@@ -362,7 +362,7 @@ export async function prepareIngredientTreeData(mainItemId, mainRecipeData) {
   if (ingredientTreeWorker) {
     ingredientTreeWorker.terminate();
   }
-  ingredientTreeWorker = new Worker(new URL('./workers/ingredientTreeWorker.js', import.meta.url), { type: 'module' });
+  ingredientTreeWorker = new Worker(new URL('./workers/ingredientTreeWorker.min.js', import.meta.url), { type: 'module' });
 
   return new Promise((resolve, reject) => {
     const handleMessage = (event) => {
