@@ -118,7 +118,7 @@ let costsWorkerInstance = null;
 
 function runDonesWorker(rootIngredients) {
   if (!donesWorkerInstance) {
-    donesWorkerInstance = new Worker(new URL('./workers/donesWorker.js', import.meta.url), { type: 'module' });
+    donesWorkerInstance = new Worker(new URL('./workers/donesWorker.min.js', import.meta.url), { type: 'module' });
   }
   return new Promise((resolve, reject) => {
     const handleMessage = (e) => {
@@ -139,7 +139,7 @@ function runDonesWorker(rootIngredients) {
 
 function runCostsWorker(ingredientTree, globalQty) {
   if (!costsWorkerInstance) {
-    costsWorkerInstance = new Worker(new URL('./workers/costsWorker.js', import.meta.url), { type: 'module' });
+    costsWorkerInstance = new Worker(new URL('./workers/costsWorker.min.js', import.meta.url), { type: 'module' });
   }
   return new Promise((resolve, reject) => {
     const handleMessage = (e) => {

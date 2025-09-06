@@ -561,7 +561,7 @@ let _costsWorker = null;
 async function runCostsWorker(tree, globalQty = window.globalQty || 1) {
   if (typeof Worker === 'undefined') throw new Error('Web Workers no soportados');
   if (!_costsWorker) {
-    _costsWorker = new Worker(new URL('./workers/costsWorker.js', import.meta.url), { type: 'module' });
+    _costsWorker = new Worker(new URL('./workers/costsWorker.min.js', import.meta.url), { type: 'module' });
   }
   return new Promise((resolve, reject) => {
     const handleMessage = (e) => {
