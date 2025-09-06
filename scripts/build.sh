@@ -50,6 +50,7 @@ for (const [original, hash] of Object.entries(manifest)) {
 fs.writeFileSync(manifestPath, JSON.stringify(updated, null, 2));
 
 const allowed = new Set(Object.values(updated).map(p => path.basename(p)));
+allowed.add('services.min.js');
 for (const file of fs.readdirSync(jsDir)) {
   if (file.endsWith('.min.js') && !allowed.has(file)) {
     fs.unlinkSync(path.join(jsDir, file));
@@ -99,6 +100,7 @@ const fs = require('fs');
 const path = require('path');
 const manifest = JSON.parse(fs.readFileSync(process.env.MANIFEST_PATH, 'utf8'));
 const allowed = new Set(Object.values(manifest).map(p => path.basename(p)));
+allowed.add('services.min.js');
 const dir = path.join('static', 'current', 'js');
 if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir, { recursive: true });

@@ -73,15 +73,15 @@ export default {
     format: 'es',
     entryFileNames: '[name].min.js',
     chunkFileNames: (chunkInfo) =>
-      chunkInfo.name === 'services-Bc-4z6yK'
-        ? '[name].js'
+      chunkInfo.name === 'services'
+        ? 'services.min.js'
         : '[name]-[hash].js',
     manualChunks(id) {
       if (id.includes('src/js/utils')) {
         return 'utils';
       }
       if (id.includes('src/js/services/recipeService.js')) {
-        return 'services-Bc-4z6yK';
+        return 'services';
       }
     }
   }
