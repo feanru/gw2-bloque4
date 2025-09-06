@@ -4,6 +4,8 @@ const CACHE_VERSION = 2;
 const STATIC_CACHE = `static-${APP_VERSION}-v${CACHE_VERSION}`;
 const API_CACHE = `api-${APP_VERSION}-v${CACHE_VERSION}`;
 const DEFAULT_TTL = 5 * 60 * 1000; // 5 minutes
+const MANIFEST_CACHE = 'manifest-cache';
+let NEW_MANIFEST = {};
 // Background videos served with fixed names
 const VIDEO_ASSETS = [
   'img/Secuencia01.mp4',
@@ -15,10 +17,23 @@ const PRECACHE_ASSETS = [...__PRECACHE_ASSETS__, '/offline.html'];
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(STATIC_CACHE).then(async (cache) => {
+    (async () => {
+      const cache = await caches.open(STATIC_CACHE);
       await cache.addAll(VIDEO_ASSETS);
       await cache.addAll(PRECACHE_ASSETS);
-    })
+      try {
+        const res = await fetch('/dist/manifest.json', { cache: 'no-store' });
+        const manifest = await res.json();
+        const hashes = {};
+        Object.entries(manifest).forEach(([orig, hashed]) => {
+          const m = hashed.match(/\.([^.]+)\.min\.js$/);
+          hashes[orig] = { url: hashed, hash: m ? m[1] : '' };
+        });
+        NEW_MANIFEST = hashes;
+      } catch (e) {
+        NEW_MANIFEST = {};
+      }
+    })()
   );
 });
 
@@ -27,6 +42,34 @@ self.addEventListener('activate', (event) => {
     (async () => {
       const expectedCaches = [STATIC_CACHE, API_CACHE];
       let hadOldCaches = false;
+      const manifestCache = await caches.open(MANIFEST_CACHE);
+      let newManifest = NEW_MANIFEST;
+      if (!Object.keys(newManifest).length) {
+        try {
+          const res = await fetch('/dist/manifest.json', { cache: 'no-store' });
+          const manifest = await res.json();
+          const hashes = {};
+          Object.entries(manifest).forEach(([orig, hashed]) => {
+            const m = hashed.match(/\.([^.]+)\.min\.js$/);
+            hashes[orig] = { url: hashed, hash: m ? m[1] : '' };
+          });
+          newManifest = hashes;
+        } catch {
+          newManifest = {};
+        }
+      }
+      const oldManifestRes = await manifestCache.match('manifest');
+      const oldManifest = oldManifestRes ? await oldManifestRes.json() : {};
+      const staticCache = await caches.open(STATIC_CACHE);
+      await Promise.all(
+        Object.entries(oldManifest).map(async ([key, { url: oldUrl, hash: oldHash }]) => {
+          const entry = newManifest[key];
+          if (!entry || entry.hash !== oldHash) {
+            await staticCache.delete(oldUrl);
+          }
+        })
+      );
+      await manifestCache.put('manifest', new Response(JSON.stringify(newManifest)));
       await Promise.all([
         caches.keys().then((keys) =>
           Promise.all(
