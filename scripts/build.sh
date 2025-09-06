@@ -63,8 +63,18 @@ if (leftover.length) {
 }
 NODE
 
-# Generate precache assets and build service worker
-PRECACHE_ASSETS=$(node scripts/generate-precache.js)
+# Export bundle list for service worker
+BUNDLE_ASSETS=$(node -e "process.stdout.write(JSON.stringify(Object.values(require('./dist/manifest.json'))))")
+STATIC_ASSETS=$(node scripts/generate-precache.js)
+export BUNDLE_ASSETS STATIC_ASSETS
+PRECACHE_ASSETS=$(node <<'NODE'
+const staticAssets = JSON.parse(process.env.STATIC_ASSETS);
+const bundles = JSON.parse(process.env.BUNDLE_ASSETS);
+process.stdout.write(JSON.stringify([...staticAssets, ...bundles]));
+NODE
+)
+
+# Build service worker with precache list
 sed -e "s/__APP_VERSION__/$APP_VERSION/" -e "s|__PRECACHE_ASSETS__|$PRECACHE_ASSETS|" service-worker.js > service-worker.build.js
 npx terser service-worker.build.js -o service-worker.min.js
 rm service-worker.build.js
@@ -79,6 +89,27 @@ npm run purge:cdn || true
 # Move build to releases
 mv dist "$BUILD_DIR"
 mv "$BUILD_DIR" "$TARGET_DIR"
+
+# Sync bundles to current alias and prune stale files
+mkdir -p static/current/js
+MANIFEST_PATH="$TARGET_DIR/manifest.json"
+export MANIFEST_PATH
+node <<'NODE'
+const fs = require('fs');
+const path = require('path');
+const manifest = JSON.parse(fs.readFileSync(process.env.MANIFEST_PATH, 'utf8'));
+const allowed = new Set(Object.values(manifest).map(p => path.basename(p)));
+const dir = path.join('static', 'current', 'js');
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir, { recursive: true });
+}
+for (const file of fs.readdirSync(dir)) {
+  if (file.endsWith('.min.js') && !allowed.has(file)) {
+    fs.unlinkSync(path.join(dir, file));
+  }
+}
+NODE
+cp -r "$TARGET_DIR/js/." static/current/js/
 
 # Restore html templates
 node scripts/include-assets.js restore
