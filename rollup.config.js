@@ -35,9 +35,11 @@ export default {
     'search-modal-core': 'src/js/search-modal-core.js',
     'search-modal-compare-craft': 'src/js/search-modal-compare-craft.js',
     'sw-register': 'src/js/sw-register.js',
-      'ingredientTreeWorker': 'src/js/workers/ingredientTreeWorker.js',
-      'costsWorker': 'src/js/workers/costsWorker.js'
-    },
+    'ingredientTreeWorker': 'src/js/workers/ingredientTreeWorker.js',
+    'costsWorker': 'src/js/workers/costsWorker.js',
+    'donesWorker': 'src/js/workers/donesWorker.js',
+    'ventasComprasWorker': 'src/js/workers/ventasComprasWorker.js'
+  },
   external: ['./tabs.min.js', './services/recipeService.min.js'],
   // Desactivamos tree shaking para preservar todas las exportaciones de los
   // módulos de entrada, en especial items-core, cuyas funciones se consumen
